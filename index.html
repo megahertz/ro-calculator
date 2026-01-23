@@ -112,7 +112,7 @@
       <label>Источник HCO₃⁻</label>
       <select id="bicarbSalt">
         <option value="NaHCO3" selected>NaHCO₃ (пищевая сода)</option>
-        <option value="KHCO3">KHCO₃ (если появится)</option>
+        <option value="KHCO3">KHCO₃ (гидрокарбонат калия)</option>
         <option value="none">Не добавлять HCO₃⁻</option>
       </select>
     </div>
@@ -400,27 +400,27 @@
 
     if (mode === "single"){
       const lines = [];
-      lines.push(saltLine("CaCl2·2H2O", g_CaCl2_inStock));
-      lines.push(saltLine("MgSO4·7H2O", g_MgSO4_inStock));
+      lines.push(saltLine("CaCl₂·2H₂O", g_CaCl2_inStock));
+      lines.push(saltLine("MgSO₄·7H₂O", g_MgSO4_inStock));
       if (bicarbSalt === "NaHCO3"){
-        lines.push(saltLine("NaHCO3", g_Bicarb_inStock));
+        lines.push(saltLine("NaHCO₃", g_Bicarb_inStock));
       } else if (bicarbSalt === "KHCO3"){
-        lines.push(saltLine("KHCO3", g_Bicarb_inStock));
+        lines.push(saltLine("KHCO₃", g_Bicarb_inStock));
       } else {
         lines.push("(HCO₃⁻ не добавляем)");
       }
       $("saltsSingle").textContent = lines.join("\n");
     } else {
       const linesA = [];
-      linesA.push(saltLine("CaCl2·2H2O", gA_CaCl2));
-      linesA.push(saltLine("MgSO4·7H2O", gA_MgSO4));
+      linesA.push(saltLine("CaCl₂·2H₂O", gA_CaCl2));
+      linesA.push(saltLine("MgSO₄·7H₂O", gA_MgSO4));
       $("saltsA").textContent = linesA.join("\n");
 
       const linesB = [];
       if (bicarbSalt === "NaHCO3"){
-        linesB.push(saltLine("NaHCO3", gB_Bicarb));
-      } else if (bicarbSalt === "KHCO3"){
-        linesB.push(saltLine("KHCO3", gB_Bicarb));
+        linesB.push(saltLine("NaHCO₃", gB_Bicarb));
+      } else if (bicarbSalt === "KHCO₃"){
+        linesB.push(saltLine("KHCO₃", gB_Bicarb));
       } else {
         linesB.push("(HCO₃⁻ не добавляем)");
       }
@@ -493,16 +493,16 @@
 
     if (r.mode === "single"){
       text += `Salts for ${r.stockMl} mL stock (single bottle):\n`;
-      text += `- CaCl2·2H2O: ${r.single.g_CaCl2_inStock.toFixed(2)} g\n`;
-      text += `- MgSO4·7H2O: ${r.single.g_MgSO4_inStock.toFixed(2)} g\n`;
+      text += `- CaCl₂·2H₂O: ${r.single.g_CaCl2_inStock.toFixed(2)} g\n`;
+      text += `- MgSO₄·7H₂O: ${r.single.g_MgSO4_inStock.toFixed(2)} g\n`;
       if (r.bicarbSalt === "none") text += `- HCO₃ source: none\n`;
       else text += `- ${r.bicarbSalt}: ${r.single.g_Bicarb_inStock.toFixed(2)} g\n`;
     } else {
       text += `Bottle A (Ca+Mg), dose ${r.double.dropsA} drops:\n`;
-      text += `- CaCl2·2H2O: ${r.double.gA_CaCl2.toFixed(2)} g\n`;
-      text += `- MgSO4·7H2O: ${r.double.gA_MgSO4.toFixed(2)} g\n\n`;
+      text += `- CaCl₂·2H₂O: ${r.double.gA_CaCl2.toFixed(2)} g\n`;
+      text += `- MgSO₄·7H₂O: ${r.double.gA_MgSO4.toFixed(2)} g\n\n`;
       text += `Bottle B (HCO₃), dose ${r.double.dropsB} drops:\n`;
-      if (r.bicarbSalt === "none") text += `- HCO3 source: none\n`;
+      if (r.bicarbSalt === "none") text += `- HCO₃ source: none\n`;
       else text += `- ${r.bicarbSalt}: ${r.double.gB_Bicarb.toFixed(2)} g\n`;
     }
 
