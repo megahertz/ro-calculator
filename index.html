@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -27,161 +27,168 @@
     button:hover { background: #f6f6f6; }
     .pill { display: inline-flex; gap: 8px; align-items: center; padding: 8px 10px; border: 1px solid #ddd; border-radius: 999px; }
     .hide { display: none !important; }
+    .lang-switch { position: absolute; top: 24px; right: 24px; display: flex; gap: 4px; }
+    .lang-btn { padding: 6px 12px; border-radius: 8px; border: 1px solid #ccc; background: white; cursor: pointer; font-size: 13px; }
+    .lang-btn.active { background: #333; color: white; border-color: #333; }
+    .lang-btn:hover:not(.active) { background: #f0f0f0; }
     @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-<h1>Калькулятор реминерализации RO: капли → граммы солей (1 флакон или 2 флакона)</h1>
-<p class="muted">
-  Вводишь объём бутылки, дозировку в каплях и “сколько капель в 1 mL” (по умолчанию 20).
-  Задаёшь цели по ионам (mg/L) — получаешь граммы солей на объём концентрата.
+<div class="lang-switch">
+  <button class="lang-btn" data-lang="ru">RU</button>
+  <button class="lang-btn active" data-lang="en">EN</button>
+</div>
+<h1 data-i18n="title">RO Remineralization Calculator: drops → salt grams (1 bottle or 2 bottles)</h1>
+<p class="muted" data-i18n="subtitle">
+  Enter bottle volume, dosage in drops, and "drops per 1 mL" (default 20). Set ion targets (mg/L) — get grams of salts for concentrate volume.
 </p>
 
 <div class="grid">
   <div class="card">
-    <h2>1) Режим + дозировка</h2>
+    <h2 data-i18n="section1">1) Mode + dosage</h2>
 
     <div class="row">
-      <label>Режим</label>
+      <label data-i18n="mode">Mode</label>
       <select id="mode">
-        <option value="single" selected>1 флакон (проще, возможен осадок)</option>
-        <option value="double">2 флакона (стабильнее, меньше осадка)</option>
+        <option value="single" selected data-i18n="modeSingle">1 bottle (simpler, possible precipitate)</option>
+        <option value="double" data-i18n="modeDouble">2 bottles (more stable, less precipitate)</option>
       </select>
     </div>
 
     <div class="row">
-      <label>Объём бутылки (L)</label>
+      <label data-i18n="bottleVol">Bottle volume (L)</label>
       <input id="bottleL" type="number" step="0.01" value="0.5" />
     </div>
 
     <div class="row">
-      <label>Капель в 1 mL</label>
+      <label data-i18n="dropsPerMl">Drops per 1 mL</label>
       <input id="dropsPerMl" type="number" step="0.1" value="20" />
     </div>
 
     <div class="row">
-      <label>Объём концентрата (mL)</label>
+      <label data-i18n="stockVol">Stock volume (mL)</label>
       <input id="stockMl" type="number" step="1" value="100" />
     </div>
 
     <div id="singleDoseBlock">
       <div class="row">
-        <label>Капель на бутылку (шт)</label>
+        <label data-i18n="dropsPerBottle">Drops per bottle</label>
         <input id="dropsSingle" type="number" step="1" value="10" />
       </div>
-      <p class="muted warn">В 1 флаконе Ca²⁺ + HCO₃⁻ может давать осадок CaCO₃. Если надо — перейдёшь на 2 флакона.</p>
+      <p class="muted warn" data-i18n="singleWarn">In 1 bottle Ca²⁺ + HCO₃⁻ may form CaCO₃ precipitate. Switch to 2 bottles if needed.</p>
     </div>
 
     <div id="doubleDoseBlock" class="hide">
       <div class="row">
-        <label>Капель из флакона A (Ca+Mg)</label>
+        <label data-i18n="dropsA">Drops from bottle A (Ca+Mg)</label>
         <input id="dropsA" type="number" step="1" value="5" />
       </div>
       <div class="row">
-        <label>Капель из флакона B (HCO₃⁻)</label>
+        <label data-i18n="dropsB">Drops from bottle B (HCO₃⁻)</label>
         <input id="dropsB" type="number" step="1" value="5" />
       </div>
-      <p class="muted">Сумма A+B — общая дозировка. Удобный стандарт: 5 + 5 = 10 капель на 0.5 L.</p>
+      <p class="muted" data-i18n="doubleHint">Sum A+B = total dosage. Convenient standard: 5 + 5 = 10 drops per 0.5 L.</p>
     </div>
 
     <div class="pill muted">
-      <span>Подсказка:</span>
+      <span data-i18n="hint">Hint:</span>
       <span class="mono">dose_mL = drops / dropsPerMl</span>
     </div>
   </div>
 
   <div class="card">
-    <h2>2) Цели в готовой воде (mg/L)</h2>
+    <h2 data-i18n="section2">2) Targets in finished water (mg/L)</h2>
 
     <div class="row">
-      <label>Пресет</label>
+      <label data-i18n="preset">Preset</label>
       <select id="preset">
-        <option value="">— выбрать —</option>
+        <option value="" data-i18n="presetSelect">— select —</option>
         <option value="default" selected>Ca30 / Mg20 / HCO₃ 30 (NaHCO₃)</option>
         <option value="mineral">Ca50 / Mg20 / HCO₃ 50</option>
-        <option value="noBicarb">Ca30 / Mg20 / без HCO₃⁻</option>
+        <option value="noBicarb" data-i18n="presetNoBicarb">Ca30 / Mg20 / no HCO₃⁻</option>
       </select>
     </div>
 
     <div class="row">
-      <label>Ca²⁺ цель (mg/L)</label>
+      <label data-i18n="targetCa">Ca²⁺ target (mg/L)</label>
       <input id="targetCa" type="number" step="1" value="30" />
     </div>
 
     <div class="row">
-      <label>Mg²⁺ цель (mg/L)</label>
+      <label data-i18n="targetMg">Mg²⁺ target (mg/L)</label>
       <input id="targetMg" type="number" step="1" value="20" />
     </div>
 
     <div class="row">
-      <label>HCO₃⁻ цель (mg/L)</label>
+      <label data-i18n="targetHco3">HCO₃⁻ target (mg/L)</label>
       <input id="targetHco3" type="number" step="1" value="30" />
     </div>
 
     <div class="row">
-      <label>Источник HCO₃⁻</label>
+      <label data-i18n="bicarbSource">HCO₃⁻ source</label>
       <select id="bicarbSalt">
-        <option value="NaHCO3" selected>NaHCO₃ (пищевая сода)</option>
-        <option value="KHCO3">KHCO₃ (гидрокарбонат калия)</option>
-        <option value="none">Не добавлять HCO₃⁻</option>
+        <option value="NaHCO3" selected data-i18n="bicarbNaHCO3">NaHCO₃ (baking soda)</option>
+        <option value="KHCO3" data-i18n="bicarbKHCO3">KHCO₃ (potassium bicarbonate)</option>
+        <option value="none" data-i18n="bicarbNone">Don't add HCO₃⁻</option>
       </select>
     </div>
 
-    <p class="muted">
-      Дополнительно считаем ориентиры: <span class="mono">GH (dH)</span>, <span class="mono">KH (dH)</span> и приблизительный добавленный <span class="mono">TDS</span>.
+    <p class="muted" data-i18n="extraCalc">
+      Also calculating estimates: <span class="mono">GH (dH)</span>, <span class="mono">KH (dH)</span> and approximate added <span class="mono">TDS</span>.
     </p>
   </div>
 </div>
 
 <div class="card" style="margin-top:16px;">
-  <h2>Результаты</h2>
+  <h2 data-i18n="results">Results</h2>
 
   <div class="out">
     <div class="kpi">
       <div>
-        <div class="k">Доза (mL) на бутылку</div>
+        <div class="k" data-i18n="dosePerBottle">Dose (mL) per bottle</div>
         <div class="v mono" id="doseMlOut">—</div>
       </div>
       <div>
-        <div class="k">Разведение (концентрат : вода)</div>
+        <div class="k" data-i18n="dilution">Dilution (concentrate : water)</div>
         <div class="v mono" id="dilutionOut">—</div>
       </div>
       <div>
-        <div class="k">Оценка GH (°dH)</div>
+        <div class="k" data-i18n="ghEstimate">GH estimate (°dH)</div>
         <div class="v mono" id="ghOut">—</div>
       </div>
       <div>
-        <div class="k">Оценка KH (°dH)</div>
+        <div class="k" data-i18n="khEstimate">KH estimate (°dH)</div>
         <div class="v mono" id="khOut">—</div>
       </div>
       <div>
-        <div class="k">Na⁺ в готовой воде (mg/L)</div>
+        <div class="k" data-i18n="naInWater">Na⁺ in finished water (mg/L)</div>
         <div class="v mono" id="naOut">—</div>
       </div>
       <div>
-        <div class="k">Добавленный TDS (примерно, mg/L)</div>
+        <div class="k" data-i18n="addedTds">Added TDS (approx, mg/L)</div>
         <div class="v mono" id="tdsOut">—</div>
       </div>
     </div>
 
     <hr style="border:none;border-top:1px solid #eee;margin:12px 0;"/>
 
-    <div class="k">Соли на <span class="mono" id="stockLabel">100 mL</span> концентрата:</div>
+    <div class="k"><span data-i18n="saltsFor">Salts for</span> <span class="mono" id="stockLabel">100 mL</span> <span data-i18n="concentrate">of concentrate</span>:</div>
 
     <div id="singleOutBlock">
       <div class="v mono" id="saltsSingle" style="white-space:pre; margin-top:8px;">—</div>
     </div>
 
     <div id="doubleOutBlock" class="hide">
-      <div class="muted" style="margin-top:6px;">Флакон A (Ca+Mg):</div>
+      <div class="muted" style="margin-top:6px;" data-i18n="bottleA">Bottle A (Ca+Mg):</div>
       <div class="v mono" id="saltsA" style="white-space:pre; margin-top:6px;">—</div>
-      <div class="muted" style="margin-top:10px;">Флакон B (HCO₃⁻):</div>
+      <div class="muted" style="margin-top:10px;" data-i18n="bottleB">Bottle B (HCO₃⁻):</div>
       <div class="v mono" id="saltsB" style="white-space:pre; margin-top:6px;">—</div>
     </div>
 
     <hr style="border:none;border-top:1px solid #eee;margin:12px 0;"/>
 
-    <div class="k">Формулы для перепроверки</div>
+    <div class="k" data-i18n="formulas">Formulas for verification</div>
     <div class="muted mono" style="white-space:pre-wrap; margin-top:6px;" id="formulas">
       dose_mL = drops / dropsPerMl
       dilution_factor = bottle_mL / dose_mL
@@ -204,7 +211,7 @@
     </div>
 
     <div class="btns">
-      <button id="btnCopy">Скопировать результат</button>
+      <button id="btnCopy" data-i18n="copyBtn">Copy result</button>
     </div>
 
     <p class="muted warn" id="warnings" style="margin-top:10px;"></p>
@@ -212,6 +219,153 @@
 </div>
 
 <script>
+  // --- Translations ---
+  const i18n = {
+    ru: {
+      title: "Калькулятор реминерализации RO: капли → граммы солей (1 флакон или 2 флакона)",
+      subtitle: "Вводишь объём бутылки, дозировку в каплях и \"сколько капель в 1 mL\" (по умолчанию 20). Задаёшь цели по ионам (mg/L) — получаешь граммы солей на объём концентрата.",
+      section1: "1) Режим + дозировка",
+      mode: "Режим",
+      modeSingle: "1 флакон (проще, возможен осадок)",
+      modeDouble: "2 флакона (стабильнее, меньше осадка)",
+      bottleVol: "Объём бутылки (L)",
+      dropsPerMl: "Капель в 1 mL",
+      stockVol: "Объём концентрата (mL)",
+      dropsPerBottle: "Капель на бутылку (шт)",
+      singleWarn: "В 1 флаконе Ca²⁺ + HCO₃⁻ может давать осадок CaCO₃. Если надо — перейдёшь на 2 флакона.",
+      dropsA: "Капель из флакона A (Ca+Mg)",
+      dropsB: "Капель из флакона B (HCO₃⁻)",
+      doubleHint: "Сумма A+B — общая дозировка. Удобный стандарт: 5 + 5 = 10 капель на 0.5 L.",
+      hint: "Подсказка:",
+      section2: "2) Цели в готовой воде (mg/L)",
+      preset: "Пресет",
+      presetSelect: "— выбрать —",
+      presetNoBicarb: "Ca30 / Mg20 / без HCO₃⁻",
+      targetCa: "Ca²⁺ цель (mg/L)",
+      targetMg: "Mg²⁺ цель (mg/L)",
+      targetHco3: "HCO₃⁻ цель (mg/L)",
+      bicarbSource: "Источник HCO₃⁻",
+      bicarbNaHCO3: "NaHCO₃ (пищевая сода)",
+      bicarbKHCO3: "KHCO₃ (гидрокарбонат калия)",
+      bicarbNone: "Не добавлять HCO₃⁻",
+      extraCalc: "Дополнительно считаем ориентиры: <span class=\"mono\">GH (dH)</span>, <span class=\"mono\">KH (dH)</span> и приблизительный добавленный <span class=\"mono\">TDS</span>.",
+      results: "Результаты",
+      dosePerBottle: "Доза (mL) на бутылку",
+      dilution: "Разведение (концентрат : вода)",
+      ghEstimate: "Оценка GH (°dH)",
+      khEstimate: "Оценка KH (°dH)",
+      naInWater: "Na⁺ в готовой воде (mg/L)",
+      addedTds: "Добавленный TDS (примерно, mg/L)",
+      saltsFor: "Соли на",
+      concentrate: "концентрата",
+      bottleA: "Флакон A (Ca+Mg):",
+      bottleB: "Флакон B (HCO₃⁻):",
+      formulas: "Формулы для перепроверки",
+      copyBtn: "Скопировать результат",
+      noBicarbAdded: "(HCO₃⁻ не добавляем)",
+      noNaBicarb: "0 mg/L (HCO₃⁻ не добавляем)",
+      warnings: "Предупреждения:",
+      warnDivZero: "Проверь капли/мл и дозировку: деление на ноль или странные числа.",
+      warnLowDilution: "Очень маленькое разведение: концентрат выйдет слабым (или капля слишком большая).",
+      warnHighDilution: "Очень большое разведение: соли в концентрате будут очень концентрированными.",
+      warnPrecipitate: "1 флакон: Ca²⁺ + HCO₃⁻ могут дать осадок CaCO₃ → встряхивать / перейти на 2 флакона при необходимости.",
+      warnHighNa: "Na⁺ получается заметным (>25 mg/L). Если хочешь ниже — уменьши HCO₃⁻ цель.",
+      copied: "Скопировано в буфер обмена."
+    },
+    en: {
+      title: "RO Remineralization Calculator: drops → salt grams (1 bottle or 2 bottles)",
+      subtitle: "Enter bottle volume, dosage in drops, and \"drops per 1 mL\" (default 20). Set ion targets (mg/L) — get grams of salts for concentrate volume.",
+      section1: "1) Mode + dosage",
+      mode: "Mode",
+      modeSingle: "1 bottle (simpler, possible precipitate)",
+      modeDouble: "2 bottles (more stable, less precipitate)",
+      bottleVol: "Bottle volume (L)",
+      dropsPerMl: "Drops per 1 mL",
+      stockVol: "Stock volume (mL)",
+      dropsPerBottle: "Drops per bottle",
+      singleWarn: "In 1 bottle Ca²⁺ + HCO₃⁻ may form CaCO₃ precipitate. Switch to 2 bottles if needed.",
+      dropsA: "Drops from bottle A (Ca+Mg)",
+      dropsB: "Drops from bottle B (HCO₃⁻)",
+      doubleHint: "Sum A+B = total dosage. Convenient standard: 5 + 5 = 10 drops per 0.5 L.",
+      hint: "Hint:",
+      section2: "2) Targets in finished water (mg/L)",
+      preset: "Preset",
+      presetSelect: "— select —",
+      presetNoBicarb: "Ca30 / Mg20 / no HCO₃⁻",
+      targetCa: "Ca²⁺ target (mg/L)",
+      targetMg: "Mg²⁺ target (mg/L)",
+      targetHco3: "HCO₃⁻ target (mg/L)",
+      bicarbSource: "HCO₃⁻ source",
+      bicarbNaHCO3: "NaHCO₃ (baking soda)",
+      bicarbKHCO3: "KHCO₃ (potassium bicarbonate)",
+      bicarbNone: "Don't add HCO₃⁻",
+      extraCalc: "Also calculating estimates: <span class=\"mono\">GH (dH)</span>, <span class=\"mono\">KH (dH)</span> and approximate added <span class=\"mono\">TDS</span>.",
+      results: "Results",
+      dosePerBottle: "Dose (mL) per bottle",
+      dilution: "Dilution (concentrate : water)",
+      ghEstimate: "GH estimate (°dH)",
+      khEstimate: "KH estimate (°dH)",
+      naInWater: "Na⁺ in finished water (mg/L)",
+      addedTds: "Added TDS (approx, mg/L)",
+      saltsFor: "Salts for",
+      concentrate: "of concentrate",
+      bottleA: "Bottle A (Ca+Mg):",
+      bottleB: "Bottle B (HCO₃⁻):",
+      formulas: "Formulas for verification",
+      copyBtn: "Copy result",
+      noBicarbAdded: "(HCO₃⁻ not added)",
+      noNaBicarb: "0 mg/L (HCO₃⁻ not added)",
+      warnings: "Warnings:",
+      warnDivZero: "Check drops/mL and dosage: division by zero or strange values.",
+      warnLowDilution: "Very low dilution: concentrate will be weak (or drop is too large).",
+      warnHighDilution: "Very high dilution: salts in concentrate will be very concentrated.",
+      warnPrecipitate: "1 bottle: Ca²⁺ + HCO₃⁻ may form CaCO₃ precipitate → shake well / switch to 2 bottles if needed.",
+      warnHighNa: "Na⁺ is noticeable (>25 mg/L). To reduce it — lower HCO₃⁻ target.",
+      copied: "Copied to clipboard."
+    }
+  };
+
+  function detectLanguage() {
+    const saved = localStorage.getItem('roCalcLang');
+    if (saved) return saved;
+
+    const browserLang = navigator.language || navigator.userLanguage || '';
+    if (browserLang.startsWith('ru')) return 'ru';
+    return 'en';
+  }
+
+  let currentLang = detectLanguage();
+
+  function t(key) {
+    return i18n[currentLang][key] || key;
+  }
+
+  function applyLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('roCalcLang', lang);
+    document.documentElement.lang = lang;
+
+    // Update language buttons
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+
+    // Update all elements with data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (i18n[lang][key]) {
+        if (key === 'extraCalc') {
+          el.innerHTML = i18n[lang][key];
+        } else {
+          el.textContent = i18n[lang][key];
+        }
+      }
+    });
+
+    // Recompute to update dynamic text
+    if (typeof compute === 'function') compute();
+  }
+
   // --- Molar masses, g/mol ---
   const MM = {
     Ca: 40.078,
@@ -397,7 +551,7 @@
     } else if (bicarbSalt === "KHCO3"){
       $("naOut").textContent = `Na: 0 (K≈${round(k_mgL,1)} mg/L)`;
     } else {
-      $("naOut").textContent = `0 mg/L (HCO₃⁻ не добавляем)`;
+      $("naOut").textContent = t('noNaBicarb');
     }
 
     $("stockLabel").textContent = `${round(stockMl,0)} mL`;
@@ -414,7 +568,7 @@
       } else if (bicarbSalt === "KHCO3"){
         lines.push(saltLine("KHCO₃", g_Bicarb_inStock));
       } else {
-        lines.push("(HCO₃⁻ не добавляем)");
+        lines.push(t('noBicarbAdded'));
       }
       $("saltsSingle").textContent = lines.join("\n");
     } else {
@@ -429,24 +583,24 @@
       } else if (bicarbSalt === "KHCO₃"){
         linesB.push(saltLine("KHCO₃", gB_Bicarb));
       } else {
-        linesB.push("(HCO₃⁻ не добавляем)");
+        linesB.push(t('noBicarbAdded'));
       }
       $("saltsB").textContent = linesB.join("\n");
     }
 
     // Warnings
     const warns = [];
-    if (!isFinite(dilutionFactor) || dilutionFactor <= 0) warns.push("Проверь капли/мл и дозировку: деление на ноль или странные числа.");
-    if (dilutionFactor < 200) warns.push("Очень маленькое разведение: концентрат выйдет слабым (или капля слишком большая).");
-    if (dilutionFactor > 5000) warns.push("Очень большое разведение: соли в концентрате будут очень концентрированными.");
+    if (!isFinite(dilutionFactor) || dilutionFactor <= 0) warns.push(t('warnDivZero'));
+    if (dilutionFactor < 200) warns.push(t('warnLowDilution'));
+    if (dilutionFactor > 5000) warns.push(t('warnHighDilution'));
 
     if (mode === "single" && bicarbSalt !== "none" && targetCa > 0 && targetHco3 > 0){
-      warns.push("1 флакон: Ca²⁺ + HCO₃⁻ могут дать осадок CaCO₃ → встряхивать / перейти на 2 флакона при необходимости.");
+      warns.push(t('warnPrecipitate'));
     }
     if (bicarbSalt === "NaHCO3" && na_mgL > 25){
-      warns.push("Na⁺ получается заметным (>25 mg/L). Если хочешь ниже — уменьши HCO₃⁻ цель.");
+      warns.push(t('warnHighNa'));
     }
-    $("warnings").textContent = warns.length ? ("Предупреждения: " + warns.join(" ")) : "";
+    $("warnings").textContent = warns.length ? (t('warnings') + " " + warns.join(" ")) : "";
     $("warnings").classList.toggle("hide", !warns.length);
 
     // Store for copy
@@ -512,7 +666,7 @@
     }
 
     await navigator.clipboard.writeText(text);
-    alert("Скопировано в буфер обмена.");
+    alert(t('copied'));
   }
 
   // Wire events
@@ -522,7 +676,13 @@
   $("preset").addEventListener("change", e => applyPreset(e.target.value));
   $("btnCopy").addEventListener("click", copyResult);
 
-  compute();
+  // Language switcher
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
+  });
+
+  // Initialize with saved language
+  applyLanguage(currentLang);
 </script>
 </body>
 </html>
