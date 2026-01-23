@@ -94,18 +94,28 @@
     <h2>2) Цели в готовой воде (mg/L)</h2>
 
     <div class="row">
+      <label>Пресет</label>
+      <select id="preset">
+        <option value="">— выбрать —</option>
+        <option value="default" selected>Ca30 / Mg20 / HCO₃ 30 (NaHCO₃)</option>
+        <option value="mineral">Ca50 / Mg20 / HCO₃ 50</option>
+        <option value="noBicarb">Ca30 / Mg20 / без HCO₃⁻</option>
+      </select>
+    </div>
+
+    <div class="row">
       <label>Ca²⁺ цель (mg/L)</label>
-      <input id="targetCa" type="number" step="1" value="40" />
+      <input id="targetCa" type="number" step="1" value="30" />
     </div>
 
     <div class="row">
       <label>Mg²⁺ цель (mg/L)</label>
-      <input id="targetMg" type="number" step="1" value="10" />
+      <input id="targetMg" type="number" step="1" value="20" />
     </div>
 
     <div class="row">
       <label>HCO₃⁻ цель (mg/L)</label>
-      <input id="targetHco3" type="number" step="1" value="50" />
+      <input id="targetHco3" type="number" step="1" value="30" />
     </div>
 
     <div class="row">
@@ -194,9 +204,6 @@
     </div>
 
     <div class="btns">
-      <button id="btnPreset">Пресет: Ca40 / Mg10 / HCO₃ 50 (NaHCO₃)</button>
-      <button id="btnMoreMineral">Пресет: Ca50 / Mg20 / HCO₃ 50</button>
-      <button id="btnNoBicarb">Пресет: без HCO₃⁻</button>
       <button id="btnCopy">Скопировать результат</button>
     </div>
 
@@ -453,26 +460,24 @@
     };
   }
 
-  function presetDefault(){
-    $("targetCa").value = 40;
-    $("targetMg").value = 10;
-    $("targetHco3").value = 50;
-    $("bicarbSalt").value = "NaHCO3";
-    compute();
-  }
-
-  function presetMoreMineral(){
-    $("targetCa").value = 50;
-    $("targetMg").value = 20;
-    $("targetHco3").value = 50;
-    $("bicarbSalt").value = "NaHCO3";
-    compute();
-  }
-
-  function presetNoBicarb(){
-    $("targetHco3").value = 0;
-    $("bicarbSalt").value = "none";
-    compute();
+  function applyPreset(preset){
+    if (preset === "default"){
+      $("targetCa").value = 30;
+      $("targetMg").value = 20;
+      $("targetHco3").value = 30;
+      $("bicarbSalt").value = "NaHCO3";
+    } else if (preset === "mineral"){
+      $("targetCa").value = 50;
+      $("targetMg").value = 20;
+      $("targetHco3").value = 50;
+      $("bicarbSalt").value = "NaHCO3";
+    } else if (preset === "noBicarb"){
+      $("targetCa").value = 30;
+      $("targetMg").value = 20;
+      $("targetHco3").value = 0;
+      $("bicarbSalt").value = "none";
+    }
+    if (preset) compute();
   }
 
   async function copyResult(){
@@ -514,10 +519,7 @@
   ["mode","bottleL","dropsPerMl","stockMl","dropsSingle","dropsA","dropsB","targetCa","targetMg","targetHco3","bicarbSalt"]
   .forEach(id => $(id).addEventListener("input", compute));
   $("mode").addEventListener("change", toggleModeUI);
-
-  $("btnPreset").addEventListener("click", presetDefault);
-  $("btnMoreMineral").addEventListener("click", presetMoreMineral);
-  $("btnNoBicarb").addEventListener("click", presetNoBicarb);
+  $("preset").addEventListener("change", e => applyPreset(e.target.value));
   $("btnCopy").addEventListener("click", copyResult);
 
   compute();

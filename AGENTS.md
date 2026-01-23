@@ -1,6 +1,73 @@
-# WHO Nutrients in Drinking Water - Agent Reference
+# RO Remineralization Calculator - Agent Reference
 
-Quick reference for AI agents and developers to search and navigate this documentation.
+Quick reference for AI agents and developers working on this project.
+
+---
+
+## Key File: index.html
+
+**Purpose:** Single-page web application for calculating salt quantities needed to remineralize reverse osmosis (RO) water.
+
+**Language:** Russian UI with English code comments
+
+### What It Does
+
+Users input:
+- Bottle volume (L), drops per mL, concentrate volume (mL)
+- Dosage mode: single bottle or two bottles (A: Ca+Mg, B: HCO₃)
+- Target ion concentrations: Ca²⁺, Mg²⁺, HCO₃⁻ (mg/L)
+- Bicarbonate source: NaHCO₃, KHCO₃, or none
+
+Calculator outputs:
+- Grams of each salt for the concentrate volume
+- Dose in mL per bottle
+- Dilution ratio
+- Estimated GH/KH (°dH), Na⁺/K⁺ levels, added TDS
+
+### Structure
+
+| Lines | Section | Description |
+|-------|---------|-------------|
+| 1-32 | Head/CSS | Styles, responsive grid layout |
+| 33-205 | HTML Body | Input forms, results display, preset buttons |
+| 207-524 | JavaScript | All calculation logic |
+
+### Key JavaScript Components
+
+| Lines | Component | Purpose |
+|-------|-----------|---------|
+| 209-230 | `MM`, `frac` | Molar masses and mass fractions for salts |
+| 232-238 | Utility functions | `$()`, `num()`, `round()` |
+| 240-251 | `toggleModeUI()` | Switches between single/double bottle UI |
+| 254-265 | `gramsSaltPerLWater()` | Converts ion targets to grams of salt per L |
+| 267-454 | `compute()` | Main calculation function - computes all outputs |
+| 456-476 | Preset functions | `presetDefault()`, `presetMoreMineral()`, `presetNoBicarb()` |
+| 478-511 | `copyResult()` | Copies calculation results to clipboard |
+| 513-523 | Event wiring | Input listeners, button handlers, initial compute |
+
+### Salts Used
+
+| Salt | Formula | Ion Provided |
+|------|---------|--------------|
+| Calcium chloride dihydrate | CaCl₂·2H₂O | Ca²⁺ |
+| Magnesium sulfate heptahydrate | MgSO₄·7H₂O | Mg²⁺ |
+| Sodium bicarbonate | NaHCO₃ | HCO₃⁻ (adds Na⁺) |
+| Potassium bicarbonate | KHCO₃ | HCO₃⁻ (adds K⁺) |
+
+### Calculation Formula
+
+```
+dose_mL = drops / dropsPerMl
+dilution_factor = bottle_mL / dose_mL
+C_stock(mg/L) = C_target(mg/L) * dilution_factor
+grams_salt = (C_stock / 1000) / mass_fraction_ion * stock_L
+```
+
+---
+
+## WHO Nutrients in Drinking Water Documentation
+
+Reference documentation for the scientific basis of water remineralization.
 
 ---
 
