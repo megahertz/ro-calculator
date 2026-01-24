@@ -1,688 +1,238 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RO Remineralization Calculator (drops → salts)</title>
-  <style>
-    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-    body { margin: 24px; max-width: 1050px; }
-    h1 { font-size: 20px; margin: 0 0 10px; }
-    h2 { font-size: 16px; margin: 0 0 10px; }
-    .muted { color: #666; font-size: 12px; line-height: 1.35; }
-    .warn { color: #8a4b00; }
-    .ok { color: #0a6; }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .card { border: 1px solid #ddd; border-radius: 14px; padding: 16px; }
-    .row { display: grid; grid-template-columns: 1fr 190px; gap: 10px; align-items: center; margin: 10px 0; }
-    label { color: #222; }
-    input, select { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 12px; }
-    .out { background: #fafafa; border: 1px solid #eee; border-radius: 14px; padding: 12px; }
-    .kpi { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .k { font-size: 12px; color: #666; }
-    .v { font-size: 16px; font-weight: 650; }
-    .btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
-    button { padding: 10px 12px; border-radius: 14px; border: 1px solid #ccc; background: white; cursor: pointer; }
-    button:hover { background: #f6f6f6; }
-    .pill { display: inline-flex; gap: 8px; align-items: center; padding: 8px 10px; border: 1px solid #ddd; border-radius: 999px; }
-    .hide { display: none !important; }
-    .lang-switch { position: absolute; top: 24px; right: 24px; display: flex; gap: 4px; }
-    .lang-btn { padding: 6px 12px; border-radius: 8px; border: 1px solid #ccc; background: white; cursor: pointer; font-size: 13px; }
-    .lang-btn.active { background: #333; color: white; border-color: #333; }
-    .lang-btn:hover:not(.active) { background: #f0f0f0; }
-    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-  </style>
-</head>
-<body>
-<div class="lang-switch">
-  <button class="lang-btn" data-lang="ru">RU</button>
-  <button class="lang-btn active" data-lang="en">EN</button>
-</div>
-<h1 data-i18n="title">RO Remineralization Calculator: drops → salt grams (1 bottle or 2 bottles)</h1>
-<p class="muted" data-i18n="subtitle">
-  Enter bottle volume, dosage in drops, and "drops per 1 mL" (default 20). Set ion targets (mg/L) — get grams of salts for concentrate volume.
-</p>
-
-<div class="grid">
-  <div class="card">
-    <h2 data-i18n="section1">1) Mode + dosage</h2>
-
-    <div class="row">
-      <label data-i18n="mode">Mode</label>
-      <select id="mode">
-        <option value="single" selected data-i18n="modeSingle">1 bottle (simpler, possible precipitate)</option>
-        <option value="double" data-i18n="modeDouble">2 bottles (more stable, less precipitate)</option>
-      </select>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>RO Remineralization Calculator (drops → salts)</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <div class="lang-switch">
+      <button class="lang-btn" data-lang="ru">RU</button>
+      <button class="lang-btn active" data-lang="en">EN</button>
     </div>
-
-    <div class="row">
-      <label data-i18n="bottleVol">Bottle volume (L)</label>
-      <input id="bottleL" type="number" step="0.01" value="0.5" />
-    </div>
-
-    <div class="row">
-      <label data-i18n="dropsPerMl">Drops per 1 mL</label>
-      <input id="dropsPerMl" type="number" step="0.1" value="20" />
-    </div>
-
-    <div class="row">
-      <label data-i18n="stockVol">Stock volume (mL)</label>
-      <input id="stockMl" type="number" step="1" value="100" />
-    </div>
-
-    <div id="singleDoseBlock">
-      <div class="row">
-        <label data-i18n="dropsPerBottle">Drops per bottle</label>
-        <input id="dropsSingle" type="number" step="1" value="10" />
-      </div>
-      <p class="muted warn" data-i18n="singleWarn">In 1 bottle Ca²⁺ + HCO₃⁻ may form CaCO₃ precipitate. Switch to 2 bottles if needed.</p>
-    </div>
-
-    <div id="doubleDoseBlock" class="hide">
-      <div class="row">
-        <label data-i18n="dropsA">Drops from bottle A (Ca+Mg)</label>
-        <input id="dropsA" type="number" step="1" value="5" />
-      </div>
-      <div class="row">
-        <label data-i18n="dropsB">Drops from bottle B (HCO₃⁻)</label>
-        <input id="dropsB" type="number" step="1" value="5" />
-      </div>
-      <p class="muted" data-i18n="doubleHint">Sum A+B = total dosage. Convenient standard: 5 + 5 = 10 drops per 0.5 L.</p>
-    </div>
-
-    <div class="pill muted">
-      <span data-i18n="hint">Hint:</span>
-      <span class="mono">dose_mL = drops / dropsPerMl</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2 data-i18n="section2">2) Targets in finished water (mg/L)</h2>
-
-    <div class="row">
-      <label data-i18n="preset">Preset</label>
-      <select id="preset">
-        <option value="" data-i18n="presetSelect">— select —</option>
-        <option value="default" selected>Ca30 / Mg20 / HCO₃ 30 (NaHCO₃)</option>
-        <option value="mineral">Ca50 / Mg20 / HCO₃ 50</option>
-        <option value="noBicarb" data-i18n="presetNoBicarb">Ca30 / Mg20 / no HCO₃⁻</option>
-      </select>
-    </div>
-
-    <div class="row">
-      <label data-i18n="targetCa">Ca²⁺ target (mg/L)</label>
-      <input id="targetCa" type="number" step="1" value="30" />
-    </div>
-
-    <div class="row">
-      <label data-i18n="targetMg">Mg²⁺ target (mg/L)</label>
-      <input id="targetMg" type="number" step="1" value="20" />
-    </div>
-
-    <div class="row">
-      <label data-i18n="targetHco3">HCO₃⁻ target (mg/L)</label>
-      <input id="targetHco3" type="number" step="1" value="30" />
-    </div>
-
-    <div class="row">
-      <label data-i18n="bicarbSource">HCO₃⁻ source</label>
-      <select id="bicarbSalt">
-        <option value="NaHCO3" selected data-i18n="bicarbNaHCO3">NaHCO₃ (baking soda)</option>
-        <option value="KHCO3" data-i18n="bicarbKHCO3">KHCO₃ (potassium bicarbonate)</option>
-        <option value="none" data-i18n="bicarbNone">Don't add HCO₃⁻</option>
-      </select>
-    </div>
-
-    <p class="muted" data-i18n="extraCalc">
-      Also calculating estimates: <span class="mono">GH (dH)</span>, <span class="mono">KH (dH)</span> and approximate added <span class="mono">TDS</span>.
+    <h1 data-i18n>
+      RO Remineralization Calculator: drops → salt grams (1 bottle or 2 bottles)
+    </h1>
+    <p class="muted" data-i18n>
+      Enter bottle volume, dosage in drops, and "drops per 1 mL" (default 20).
+      Set ion targets (mg/L) — get grams of salts for concentrate volume.
     </p>
-  </div>
-</div>
 
-<div class="card" style="margin-top:16px;">
-  <h2 data-i18n="results">Results</h2>
+    <div class="grid">
+      <div class="card">
+        <h2 data-i18n>1) Mode + dosage</h2>
 
-  <div class="out">
-    <div class="kpi">
-      <div>
-        <div class="k" data-i18n="dosePerBottle">Dose (mL) per bottle</div>
-        <div class="v mono" id="doseMlOut">—</div>
+        <div class="row">
+          <label data-i18n>Mode</label>
+          <select id="mode">
+            <option value="single" selected data-i18n>
+              1 bottle (simpler, possible precipitate)
+            </option>
+            <option value="double" data-i18n>
+              2 bottles (more stable, less precipitate)
+            </option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label data-i18n>Bottle volume (L)</label>
+          <input id="bottleL" type="number" step="0.01" value="0.5" />
+        </div>
+
+        <div class="row">
+          <label data-i18n>Drops per 1 mL</label>
+          <input id="dropsPerMl" type="number" step="0.1" value="20" />
+        </div>
+
+        <div class="row">
+          <label data-i18n>Stock volume (mL)</label>
+          <input id="stockMl" type="number" step="1" value="100" />
+        </div>
+
+        <div id="singleDoseBlock">
+          <div class="row">
+            <label data-i18n>Drops per bottle</label>
+            <input id="dropsSingle" type="number" step="1" value="10" />
+          </div>
+          <p class="muted warn" data-i18n>
+            In 1 bottle Ca²⁺ + HCO₃⁻ may form CaCO₃ precipitate. Switch to 2
+            bottles if needed.
+          </p>
+        </div>
+
+        <div id="doubleDoseBlock" class="hide">
+          <div class="row">
+            <label data-i18n>Drops from bottle A (Ca+Mg)</label>
+            <input id="dropsA" type="number" step="1" value="5" />
+          </div>
+          <div class="row">
+            <label data-i18n>Drops from bottle B (HCO₃⁻)</label>
+            <input id="dropsB" type="number" step="1" value="5" />
+          </div>
+          <p class="muted" data-i18n>
+            Sum A+B = total dosage. Convenient standard: 5 + 5 = 10 drops per
+            0.5 L.
+          </p>
+        </div>
+
+        <div class="pill muted">
+          <span data-i18n>Hint:</span>
+          <span class="mono">dose_mL = drops / dropsPerMl</span>
+        </div>
       </div>
-      <div>
-        <div class="k" data-i18n="dilution">Dilution (concentrate : water)</div>
-        <div class="v mono" id="dilutionOut">—</div>
-      </div>
-      <div>
-        <div class="k" data-i18n="ghEstimate">GH estimate (°dH)</div>
-        <div class="v mono" id="ghOut">—</div>
-      </div>
-      <div>
-        <div class="k" data-i18n="khEstimate">KH estimate (°dH)</div>
-        <div class="v mono" id="khOut">—</div>
-      </div>
-      <div>
-        <div class="k" data-i18n="naInWater">Na⁺ in finished water (mg/L)</div>
-        <div class="v mono" id="naOut">—</div>
-      </div>
-      <div>
-        <div class="k" data-i18n="addedTds">Added TDS (approx, mg/L)</div>
-        <div class="v mono" id="tdsOut">—</div>
+
+      <div class="card">
+        <h2 data-i18n>2) Targets in finished water (mg/L)</h2>
+
+        <div class="row">
+          <label data-i18n>Preset</label>
+          <select id="preset">
+            <option value="" data-i18n>— select —</option>
+            <option value="default" selected>
+              Ca30 / Mg20 / HCO₃ 30 (NaHCO₃)
+            </option>
+            <option value="mineral">Ca50 / Mg20 / HCO₃ 50</option>
+            <option value="noBicarb" data-i18n>Ca30 / Mg20 / no HCO₃⁻</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label data-i18n>Ca²⁺ target (mg/L)</label>
+          <input id="targetCa" type="number" step="1" value="30" />
+        </div>
+
+        <div class="row">
+          <label data-i18n>Mg²⁺ target (mg/L)</label>
+          <input id="targetMg" type="number" step="1" value="20" />
+        </div>
+
+        <div class="row">
+          <label data-i18n>HCO₃⁻ target (mg/L)</label>
+          <input id="targetHco3" type="number" step="1" value="30" />
+        </div>
+
+        <div class="row">
+          <label data-i18n>HCO₃⁻ source</label>
+          <select id="bicarbSalt">
+            <option value="NaHCO3" selected data-i18n>
+              NaHCO₃ (baking soda)
+            </option>
+            <option value="KHCO3" data-i18n>
+              KHCO₃ (potassium bicarbonate)
+            </option>
+            <option value="none" data-i18n>Don't add HCO₃⁻</option>
+          </select>
+        </div>
+
+        <p class="muted">
+          Also calculating estimates: <span class="mono">GH (dH)</span>,
+          <span class="mono">KH (dH)</span> and approximate added
+          <span class="mono">TDS</span>.
+        </p>
       </div>
     </div>
 
-    <hr style="border:none;border-top:1px solid #eee;margin:12px 0;"/>
+    <div class="card" style="margin-top: 16px">
+      <h2 data-i18n>Results</h2>
 
-    <div class="k"><span data-i18n="saltsFor">Salts for</span> <span class="mono" id="stockLabel">100 mL</span> <span data-i18n="concentrate">of concentrate</span>:</div>
+      <div class="out">
+        <div class="kpi">
+          <div>
+            <div class="k" data-i18n>Dose (mL) per bottle</div>
+            <div class="v mono" id="doseMlOut">—</div>
+          </div>
+          <div>
+            <div class="k" data-i18n>Dilution (concentrate : water)</div>
+            <div class="v mono" id="dilutionOut">—</div>
+          </div>
+          <div>
+            <div class="k" data-i18n>GH estimate (°dH)</div>
+            <div class="v mono" id="ghOut">—</div>
+          </div>
+          <div>
+            <div class="k" data-i18n>KH estimate (°dH)</div>
+            <div class="v mono" id="khOut">—</div>
+          </div>
+          <div>
+            <div class="k" data-i18n>Na⁺ in finished water (mg/L)</div>
+            <div class="v mono" id="naOut">—</div>
+          </div>
+          <div>
+            <div class="k" data-i18n>Added TDS (approx, mg/L)</div>
+            <div class="v mono" id="tdsOut">—</div>
+          </div>
+        </div>
 
-    <div id="singleOutBlock">
-      <div class="v mono" id="saltsSingle" style="white-space:pre; margin-top:8px;">—</div>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 12px 0" />
+
+        <div class="k">
+          <span data-i18n>Salts for</span>
+          <span class="mono" id="stockLabel">100 mL</span>
+          <span data-i18n>of concentrate</span>:
+        </div>
+
+        <div id="singleOutBlock">
+          <div
+            class="v mono"
+            id="saltsSingle"
+            style="white-space: pre; margin-top: 8px"
+          >
+            —
+          </div>
+        </div>
+
+        <div id="doubleOutBlock" class="hide">
+          <div class="muted" style="margin-top: 6px" data-i18n>
+            Bottle A (Ca+Mg):
+          </div>
+          <div
+            class="v mono"
+            id="saltsA"
+            style="white-space: pre; margin-top: 6px"
+          >
+            —
+          </div>
+          <div class="muted" style="margin-top: 10px" data-i18n>
+            Bottle B (HCO₃⁻):
+          </div>
+          <div
+            class="v mono"
+            id="saltsB"
+            style="white-space: pre; margin-top: 6px"
+          >
+            —
+          </div>
+        </div>
+
+        <hr style="border: none; border-top: 1px solid #eee; margin: 12px 0" />
+
+        <div class="k" data-i18n>Formulas for verification</div>
+        <div
+          class="muted mono"
+          style="white-space: pre-wrap; margin-top: 6px"
+          id="formulas"
+        >
+          dose_mL = drops / dropsPerMl dilution_factor = bottle_mL / dose_mL
+          C_stock(mg/L) = C_target(mg/L) * dilution_factor
+          grams_salt_per_L_stock = (C_stock(mg/L) / 1000) /
+          mass_fraction_ion_in_salt grams_in_stock_volume =
+          grams_salt_per_L_stock * (stock_mL / 1000) Hardness: Ca as CaCO₃
+          (mg/L) = Ca(mg/L) * 2.497 Mg as CaCO₃ (mg/L) = Mg(mg/L) * 4.118
+          GH(°dH) = (CaCO3_total mg/L) / 17.848 Alkalinity (approx): HCO₃ as
+          CaCO₃ (mg/L) = HCO₃(mg/L) * (50 / 61.0168) KH(°dH) = (HCO3_as_CaCO3
+          mg/L) / 17.848 Approx added TDS: TDS_added ≈ (mg/L of added salts in
+          finished water summed)
+        </div>
+
+        <div class="btns">
+          <button id="btnCopy" data-i18n>Copy result</button>
+        </div>
+
+        <p class="muted warn" id="warnings" style="margin-top: 10px"></p>
+      </div>
     </div>
 
-    <div id="doubleOutBlock" class="hide">
-      <div class="muted" style="margin-top:6px;" data-i18n="bottleA">Bottle A (Ca+Mg):</div>
-      <div class="v mono" id="saltsA" style="white-space:pre; margin-top:6px;">—</div>
-      <div class="muted" style="margin-top:10px;" data-i18n="bottleB">Bottle B (HCO₃⁻):</div>
-      <div class="v mono" id="saltsB" style="white-space:pre; margin-top:6px;">—</div>
-    </div>
-
-    <hr style="border:none;border-top:1px solid #eee;margin:12px 0;"/>
-
-    <div class="k" data-i18n="formulas">Formulas for verification</div>
-    <div class="muted mono" style="white-space:pre-wrap; margin-top:6px;" id="formulas">
-      dose_mL = drops / dropsPerMl
-      dilution_factor = bottle_mL / dose_mL
-      C_stock(mg/L) = C_target(mg/L) * dilution_factor
-
-      grams_salt_per_L_stock = (C_stock(mg/L) / 1000) / mass_fraction_ion_in_salt
-      grams_in_stock_volume = grams_salt_per_L_stock * (stock_mL / 1000)
-
-      Hardness:
-      Ca as CaCO₃ (mg/L) = Ca(mg/L) * 2.497
-      Mg as CaCO₃ (mg/L) = Mg(mg/L) * 4.118
-      GH(°dH) = (CaCO3_total mg/L) / 17.848
-
-      Alkalinity (approx):
-      HCO₃ as CaCO₃ (mg/L) = HCO₃(mg/L) * (50 / 61.0168)
-      KH(°dH) = (HCO3_as_CaCO3 mg/L) / 17.848
-
-      Approx added TDS:
-      TDS_added ≈ (mg/L of added salts in finished water summed)
-    </div>
-
-    <div class="btns">
-      <button id="btnCopy" data-i18n="copyBtn">Copy result</button>
-    </div>
-
-    <p class="muted warn" id="warnings" style="margin-top:10px;"></p>
-  </div>
-</div>
-
-<script>
-  // --- Translations ---
-  const i18n = {
-    ru: {
-      title: "Калькулятор реминерализации RO: капли → граммы солей (1 флакон или 2 флакона)",
-      subtitle: "Вводишь объём бутылки, дозировку в каплях и \"сколько капель в 1 mL\" (по умолчанию 20). Задаёшь цели по ионам (mg/L) — получаешь граммы солей на объём концентрата.",
-      section1: "1) Режим + дозировка",
-      mode: "Режим",
-      modeSingle: "1 флакон (проще, возможен осадок)",
-      modeDouble: "2 флакона (стабильнее, меньше осадка)",
-      bottleVol: "Объём бутылки (L)",
-      dropsPerMl: "Капель в 1 mL",
-      stockVol: "Объём концентрата (mL)",
-      dropsPerBottle: "Капель на бутылку (шт)",
-      singleWarn: "В 1 флаконе Ca²⁺ + HCO₃⁻ может давать осадок CaCO₃. Если надо — перейдёшь на 2 флакона.",
-      dropsA: "Капель из флакона A (Ca+Mg)",
-      dropsB: "Капель из флакона B (HCO₃⁻)",
-      doubleHint: "Сумма A+B — общая дозировка. Удобный стандарт: 5 + 5 = 10 капель на 0.5 L.",
-      hint: "Подсказка:",
-      section2: "2) Цели в готовой воде (mg/L)",
-      preset: "Пресет",
-      presetSelect: "— выбрать —",
-      presetNoBicarb: "Ca30 / Mg20 / без HCO₃⁻",
-      targetCa: "Ca²⁺ цель (mg/L)",
-      targetMg: "Mg²⁺ цель (mg/L)",
-      targetHco3: "HCO₃⁻ цель (mg/L)",
-      bicarbSource: "Источник HCO₃⁻",
-      bicarbNaHCO3: "NaHCO₃ (пищевая сода)",
-      bicarbKHCO3: "KHCO₃ (гидрокарбонат калия)",
-      bicarbNone: "Не добавлять HCO₃⁻",
-      extraCalc: "Дополнительно считаем ориентиры: <span class=\"mono\">GH (dH)</span>, <span class=\"mono\">KH (dH)</span> и приблизительный добавленный <span class=\"mono\">TDS</span>.",
-      results: "Результаты",
-      dosePerBottle: "Доза (mL) на бутылку",
-      dilution: "Разведение (концентрат : вода)",
-      ghEstimate: "Оценка GH (°dH)",
-      khEstimate: "Оценка KH (°dH)",
-      naInWater: "Na⁺ в готовой воде (mg/L)",
-      addedTds: "Добавленный TDS (примерно, mg/L)",
-      saltsFor: "Соли на",
-      concentrate: "концентрата",
-      bottleA: "Флакон A (Ca+Mg):",
-      bottleB: "Флакон B (HCO₃⁻):",
-      formulas: "Формулы для перепроверки",
-      copyBtn: "Скопировать результат",
-      noBicarbAdded: "(HCO₃⁻ не добавляем)",
-      noNaBicarb: "0 mg/L (HCO₃⁻ не добавляем)",
-      warnings: "Предупреждения:",
-      warnDivZero: "Проверь капли/мл и дозировку: деление на ноль или странные числа.",
-      warnLowDilution: "Очень маленькое разведение: концентрат выйдет слабым (или капля слишком большая).",
-      warnHighDilution: "Очень большое разведение: соли в концентрате будут очень концентрированными.",
-      warnPrecipitate: "1 флакон: Ca²⁺ + HCO₃⁻ могут дать осадок CaCO₃ → встряхивать / перейти на 2 флакона при необходимости.",
-      warnHighNa: "Na⁺ получается заметным (>25 mg/L). Если хочешь ниже — уменьши HCO₃⁻ цель.",
-      copied: "Скопировано в буфер обмена."
-    },
-    en: {
-      title: "RO Remineralization Calculator: drops → salt grams (1 bottle or 2 bottles)",
-      subtitle: "Enter bottle volume, dosage in drops, and \"drops per 1 mL\" (default 20). Set ion targets (mg/L) — get grams of salts for concentrate volume.",
-      section1: "1) Mode + dosage",
-      mode: "Mode",
-      modeSingle: "1 bottle (simpler, possible precipitate)",
-      modeDouble: "2 bottles (more stable, less precipitate)",
-      bottleVol: "Bottle volume (L)",
-      dropsPerMl: "Drops per 1 mL",
-      stockVol: "Stock volume (mL)",
-      dropsPerBottle: "Drops per bottle",
-      singleWarn: "In 1 bottle Ca²⁺ + HCO₃⁻ may form CaCO₃ precipitate. Switch to 2 bottles if needed.",
-      dropsA: "Drops from bottle A (Ca+Mg)",
-      dropsB: "Drops from bottle B (HCO₃⁻)",
-      doubleHint: "Sum A+B = total dosage. Convenient standard: 5 + 5 = 10 drops per 0.5 L.",
-      hint: "Hint:",
-      section2: "2) Targets in finished water (mg/L)",
-      preset: "Preset",
-      presetSelect: "— select —",
-      presetNoBicarb: "Ca30 / Mg20 / no HCO₃⁻",
-      targetCa: "Ca²⁺ target (mg/L)",
-      targetMg: "Mg²⁺ target (mg/L)",
-      targetHco3: "HCO₃⁻ target (mg/L)",
-      bicarbSource: "HCO₃⁻ source",
-      bicarbNaHCO3: "NaHCO₃ (baking soda)",
-      bicarbKHCO3: "KHCO₃ (potassium bicarbonate)",
-      bicarbNone: "Don't add HCO₃⁻",
-      extraCalc: "Also calculating estimates: <span class=\"mono\">GH (dH)</span>, <span class=\"mono\">KH (dH)</span> and approximate added <span class=\"mono\">TDS</span>.",
-      results: "Results",
-      dosePerBottle: "Dose (mL) per bottle",
-      dilution: "Dilution (concentrate : water)",
-      ghEstimate: "GH estimate (°dH)",
-      khEstimate: "KH estimate (°dH)",
-      naInWater: "Na⁺ in finished water (mg/L)",
-      addedTds: "Added TDS (approx, mg/L)",
-      saltsFor: "Salts for",
-      concentrate: "of concentrate",
-      bottleA: "Bottle A (Ca+Mg):",
-      bottleB: "Bottle B (HCO₃⁻):",
-      formulas: "Formulas for verification",
-      copyBtn: "Copy result",
-      noBicarbAdded: "(HCO₃⁻ not added)",
-      noNaBicarb: "0 mg/L (HCO₃⁻ not added)",
-      warnings: "Warnings:",
-      warnDivZero: "Check drops/mL and dosage: division by zero or strange values.",
-      warnLowDilution: "Very low dilution: concentrate will be weak (or drop is too large).",
-      warnHighDilution: "Very high dilution: salts in concentrate will be very concentrated.",
-      warnPrecipitate: "1 bottle: Ca²⁺ + HCO₃⁻ may form CaCO₃ precipitate → shake well / switch to 2 bottles if needed.",
-      warnHighNa: "Na⁺ is noticeable (>25 mg/L). To reduce it — lower HCO₃⁻ target.",
-      copied: "Copied to clipboard."
-    }
-  };
-
-  function detectLanguage() {
-    const saved = localStorage.getItem('roCalcLang');
-    if (saved) return saved;
-
-    const browserLang = navigator.language || navigator.userLanguage || '';
-    if (browserLang.startsWith('ru')) return 'ru';
-    return 'en';
-  }
-
-  let currentLang = detectLanguage();
-
-  function t(key) {
-    return i18n[currentLang][key] || key;
-  }
-
-  function applyLanguage(lang) {
-    currentLang = lang;
-    localStorage.setItem('roCalcLang', lang);
-    document.documentElement.lang = lang;
-
-    // Update language buttons
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.lang === lang);
-    });
-
-    // Update all elements with data-i18n
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.dataset.i18n;
-      if (i18n[lang][key]) {
-        if (key === 'extraCalc') {
-          el.innerHTML = i18n[lang][key];
-        } else {
-          el.textContent = i18n[lang][key];
-        }
-      }
-    });
-
-    // Recompute to update dynamic text
-    if (typeof compute === 'function') compute();
-  }
-
-  // --- Molar masses, g/mol ---
-  const MM = {
-    Ca: 40.078,
-    Mg: 24.305,
-    Na: 22.98976928,
-    K: 39.0983,
-    HCO3: 61.0168,
-
-    CaCl2_2H2O: 147.014,   // CaCl2·2H2O
-    MgSO4_7H2O: 246.469,   // MgSO4·7H2O
-    NaHCO3: 84.0066,
-    KHCO3: 100.115
-  };
-
-  // --- Mass fractions ---
-  const frac = {
-    Ca_in_CaCl2_2H2O: MM.Ca / MM.CaCl2_2H2O,
-    Mg_in_MgSO4_7H2O: MM.Mg / MM.MgSO4_7H2O,
-    HCO3_in_NaHCO3:   MM.HCO3 / MM.NaHCO3,
-    HCO3_in_KHCO3:    MM.HCO3 / MM.KHCO3,
-    Na_in_NaHCO3:     MM.Na / MM.NaHCO3,
-    K_in_KHCO3:       MM.K / MM.KHCO3
-  };
-
-  function $(id){ return document.getElementById(id); }
-  function num(id){ return parseFloat($(id).value); }
-  function round(n, d=2){
-    if (!isFinite(n)) return "—";
-    const p = Math.pow(10, d);
-    return String(Math.round(n*p)/p);
-  }
-
-  function toggleModeUI(){
-    const mode = $("mode").value;
-    const single = mode === "single";
-
-    $("singleDoseBlock").classList.toggle("hide", !single);
-    $("doubleDoseBlock").classList.toggle("hide", single);
-
-    $("singleOutBlock").classList.toggle("hide", !single);
-    $("doubleOutBlock").classList.toggle("hide", single);
-
-    compute();
-  }
-
-  // Convert ion targets to "grams of salt per liter of finished water"
-  function gramsSaltPerLWater(targetCa, targetMg, targetHco3, bicarbSalt){
-    const gCaCl2_perL = (targetCa/1000) / frac.Ca_in_CaCl2_2H2O;   // g/L water
-    const gMgSO4_perL = (targetMg/1000) / frac.Mg_in_MgSO4_7H2O;   // g/L water
-
-    let gBicarb_perL = 0;
-    if (bicarbSalt === "NaHCO3" && targetHco3 > 0){
-      gBicarb_perL = (targetHco3/1000) / frac.HCO3_in_NaHCO3;
-    } else if (bicarbSalt === "KHCO3" && targetHco3 > 0){
-      gBicarb_perL = (targetHco3/1000) / frac.HCO3_in_KHCO3;
-    }
-    return { gCaCl2_perL, gMgSO4_perL, gBicarb_perL };
-  }
-
-  function compute(){
-    const mode = $("mode").value;
-
-    const bottleL = num("bottleL");
-    const dropsPerMl = num("dropsPerMl");
-    const stockMl = num("stockMl");
-
-    const targetCa = num("targetCa");
-    const targetMg = num("targetMg");
-    const targetHco3 = num("targetHco3");
-    const bicarbSalt = $("bicarbSalt").value;
-
-    const bottleMl = bottleL * 1000;
-
-    // Dose in mL depends on mode
-    let dropsTotal = 0;
-    let doseMl = 0;
-
-    let dropsA = 0, dropsB = 0;
-    if (mode === "single"){
-      dropsTotal = num("dropsSingle");
-      doseMl = dropsTotal / dropsPerMl;
-    } else {
-      dropsA = num("dropsA");
-      dropsB = num("dropsB");
-      dropsTotal = dropsA + dropsB;
-      doseMl = dropsTotal / dropsPerMl;
-    }
-
-    const dilutionFactor = bottleMl / doseMl; // how many times the stock gets diluted
-
-    // Hardness/alkalinity approximations
-    // Ca hardness as CaCO3 mg/L = Ca*2.497; Mg hardness as CaCO3 mg/L = Mg*4.118
-    const ca_as_caco3 = targetCa * 2.497;
-    const mg_as_caco3 = targetMg * 4.118;
-    const gh_dh = (ca_as_caco3 + mg_as_caco3) / 17.848;
-
-    // HCO3 as CaCO3 mg/L = HCO3*(50/61.0168)
-    const hco3_as_caco3 = (bicarbSalt === "none") ? 0 : (targetHco3 * (50 / 61.0168));
-    const kh_dh = hco3_as_caco3 / 17.848;
-
-    // Na/K in finished water
-    let na_mgL = 0;
-    let k_mgL = 0;
-    if (bicarbSalt === "NaHCO3" && targetHco3 > 0){
-      const gNaHCO3_perL = (targetHco3/1000) / frac.HCO3_in_NaHCO3;
-      na_mgL = gNaHCO3_perL * 1000 * frac.Na_in_NaHCO3;
-    } else if (bicarbSalt === "KHCO3" && targetHco3 > 0){
-      const gKHCO3_perL = (targetHco3/1000) / frac.HCO3_in_KHCO3;
-      k_mgL = gKHCO3_perL * 1000 * frac.K_in_KHCO3;
-    }
-
-    // Approx added TDS: sum of added salts (mg/L) in finished water
-    const saltsWater = gramsSaltPerLWater(targetCa, targetMg, (bicarbSalt==="none"?0:targetHco3), bicarbSalt);
-    const tds_added_mgL = (saltsWater.gCaCl2_perL + saltsWater.gMgSO4_perL + saltsWater.gBicarb_perL) * 1000;
-
-    // Compute grams in stock volume based on dilution factor and mode
-    const stockL = stockMl / 1000;
-
-    // Required ion concentrations in stock (mg/L stock)
-    const stockCa_mgL = targetCa * dilutionFactor;
-    const stockMg_mgL = targetMg * dilutionFactor;
-    const stockHco3_mgL = (bicarbSalt==="none") ? 0 : (targetHco3 * dilutionFactor);
-
-    // grams salt per L of stock
-    const gPerL_CaCl2_stock = (stockCa_mgL/1000) / frac.Ca_in_CaCl2_2H2O;
-    const gPerL_MgSO4_stock = (stockMg_mgL/1000) / frac.Mg_in_MgSO4_7H2O;
-
-    let gPerL_Bicarb_stock = 0;
-    if (bicarbSalt === "NaHCO3" && stockHco3_mgL > 0){
-      gPerL_Bicarb_stock = (stockHco3_mgL/1000) / frac.HCO3_in_NaHCO3;
-    } else if (bicarbSalt === "KHCO3" && stockHco3_mgL > 0){
-      gPerL_Bicarb_stock = (stockHco3_mgL/1000) / frac.HCO3_in_KHCO3;
-    }
-
-    // grams in stock volume (single-bottle, all together)
-    const g_CaCl2_inStock = gPerL_CaCl2_stock * stockL;
-    const g_MgSO4_inStock = gPerL_MgSO4_stock * stockL;
-    const g_Bicarb_inStock = gPerL_Bicarb_stock * stockL;
-
-    // If double mode: split dilution per bottle by its own dose
-    let gA_CaCl2 = 0, gA_MgSO4 = 0;
-    let gB_Bicarb = 0;
-
-    if (mode === "double"){
-      const doseA_ml = dropsA / dropsPerMl;
-      const doseB_ml = dropsB / dropsPerMl;
-
-      const dilutionA = bottleMl / doseA_ml;
-      const dilutionB = bottleMl / doseB_ml;
-
-      const stockCaA_mgL = targetCa * dilutionA;
-      const stockMgA_mgL = targetMg * dilutionA;
-
-      const gPerL_CaCl2_A = (stockCaA_mgL/1000) / frac.Ca_in_CaCl2_2H2O;
-      const gPerL_MgSO4_A = (stockMgA_mgL/1000) / frac.Mg_in_MgSO4_7H2O;
-
-      gA_CaCl2 = gPerL_CaCl2_A * stockL;
-      gA_MgSO4 = gPerL_MgSO4_A * stockL;
-
-      if (bicarbSalt === "none" || targetHco3 <= 0){
-        gB_Bicarb = 0;
-      } else {
-        const stockHco3B_mgL = targetHco3 * dilutionB;
-        let gPerL_B = 0;
-        if (bicarbSalt === "NaHCO3"){
-          gPerL_B = (stockHco3B_mgL/1000) / frac.HCO3_in_NaHCO3;
-        } else if (bicarbSalt === "KHCO3"){
-          gPerL_B = (stockHco3B_mgL/1000) / frac.HCO3_in_KHCO3;
-        }
-        gB_Bicarb = gPerL_B * stockL;
-      }
-    }
-
-    // Output KPIs
-    $("doseMlOut").textContent = `${round(doseMl, 3)} mL`;
-    $("dilutionOut").textContent = `1 : ${round(dilutionFactor, 1)}`;
-    $("ghOut").textContent = `${round(gh_dh, 2)} °dH`;
-    $("khOut").textContent = `${round(kh_dh, 2)} °dH`;
-    $("tdsOut").textContent = `${round(tds_added_mgL, 0)} mg/L`;
-
-    if (bicarbSalt === "NaHCO3"){
-      $("naOut").textContent = `${round(na_mgL, 1)} mg/L`;
-    } else if (bicarbSalt === "KHCO3"){
-      $("naOut").textContent = `Na: 0 (K≈${round(k_mgL,1)} mg/L)`;
-    } else {
-      $("naOut").textContent = t('noNaBicarb');
-    }
-
-    $("stockLabel").textContent = `${round(stockMl,0)} mL`;
-
-    // Output salts
-    function saltLine(name, grams){ return `${name.padEnd(10)} ${round(grams, 2)} g`; }
-
-    if (mode === "single"){
-      const lines = [];
-      lines.push(saltLine("CaCl₂·2H₂O", g_CaCl2_inStock));
-      lines.push(saltLine("MgSO₄·7H₂O", g_MgSO4_inStock));
-      if (bicarbSalt === "NaHCO3"){
-        lines.push(saltLine("NaHCO₃", g_Bicarb_inStock));
-      } else if (bicarbSalt === "KHCO3"){
-        lines.push(saltLine("KHCO₃", g_Bicarb_inStock));
-      } else {
-        lines.push(t('noBicarbAdded'));
-      }
-      $("saltsSingle").textContent = lines.join("\n");
-    } else {
-      const linesA = [];
-      linesA.push(saltLine("CaCl₂·2H₂O", gA_CaCl2));
-      linesA.push(saltLine("MgSO₄·7H₂O", gA_MgSO4));
-      $("saltsA").textContent = linesA.join("\n");
-
-      const linesB = [];
-      if (bicarbSalt === "NaHCO3"){
-        linesB.push(saltLine("NaHCO₃", gB_Bicarb));
-      } else if (bicarbSalt === "KHCO₃"){
-        linesB.push(saltLine("KHCO₃", gB_Bicarb));
-      } else {
-        linesB.push(t('noBicarbAdded'));
-      }
-      $("saltsB").textContent = linesB.join("\n");
-    }
-
-    // Warnings
-    const warns = [];
-    if (!isFinite(dilutionFactor) || dilutionFactor <= 0) warns.push(t('warnDivZero'));
-    if (dilutionFactor < 200) warns.push(t('warnLowDilution'));
-    if (dilutionFactor > 5000) warns.push(t('warnHighDilution'));
-
-    if (mode === "single" && bicarbSalt !== "none" && targetCa > 0 && targetHco3 > 0){
-      warns.push(t('warnPrecipitate'));
-    }
-    if (bicarbSalt === "NaHCO3" && na_mgL > 25){
-      warns.push(t('warnHighNa'));
-    }
-    $("warnings").textContent = warns.length ? (t('warnings') + " " + warns.join(" ")) : "";
-    $("warnings").classList.toggle("hide", !warns.length);
-
-    // Store for copy
-    window.__last = {
-      mode, bottleL, dropsPerMl, stockMl,
-      targetCa, targetMg, targetHco3, bicarbSalt,
-      dropsTotal, doseMl, dilutionFactor,
-      gh_dh, kh_dh, na_mgL, k_mgL, tds_added_mgL,
-      single: { g_CaCl2_inStock, g_MgSO4_inStock, g_Bicarb_inStock },
-      double: { dropsA, dropsB, gA_CaCl2, gA_MgSO4, gB_Bicarb }
-    };
-  }
-
-  function applyPreset(preset){
-    if (preset === "default"){
-      $("targetCa").value = 30;
-      $("targetMg").value = 20;
-      $("targetHco3").value = 30;
-      $("bicarbSalt").value = "NaHCO3";
-    } else if (preset === "mineral"){
-      $("targetCa").value = 50;
-      $("targetMg").value = 20;
-      $("targetHco3").value = 50;
-      $("bicarbSalt").value = "NaHCO3";
-    } else if (preset === "noBicarb"){
-      $("targetCa").value = 30;
-      $("targetMg").value = 20;
-      $("targetHco3").value = 0;
-      $("bicarbSalt").value = "none";
-    }
-    if (preset) compute();
-  }
-
-  async function copyResult(){
-    const r = window.__last;
-    if (!r) return;
-
-    const saltName = r.bicarbSalt;
-    let text = `RO Remineralization — расчет концентрата\n`;
-    text += `Mode: ${r.mode === "single" ? "single bottle" : "two bottles"}\n`;
-    text += `Bottle: ${r.bottleL} L\n`;
-    text += `dropsPerMl: ${r.dropsPerMl}\n`;
-    text += `Stock volume: ${r.stockMl} mL\n`;
-    text += `Targets (mg/L): Ca=${r.targetCa}, Mg=${r.targetMg}, HCO₃=${r.targetHco3} (${saltName})\n`;
-    text += `Dose: ${r.dropsTotal} drops => ${r.doseMl.toFixed(3)} mL\n`;
-    text += `Dilution: 1:${r.dilutionFactor.toFixed(1)}\n`;
-    text += `GH≈${r.gh_dh.toFixed(2)} °dH, KH≈${r.kh_dh.toFixed(2)} °dH\n`;
-    text += `Na≈${r.na_mgL.toFixed(1)} mg/L, TDS_added≈${r.tds_added_mgL.toFixed(0)} mg/L\n\n`;
-
-    if (r.mode === "single"){
-      text += `Salts for ${r.stockMl} mL stock (single bottle):\n`;
-      text += `- CaCl₂·2H₂O: ${r.single.g_CaCl2_inStock.toFixed(2)} g\n`;
-      text += `- MgSO₄·7H₂O: ${r.single.g_MgSO4_inStock.toFixed(2)} g\n`;
-      if (r.bicarbSalt === "none") text += `- HCO₃ source: none\n`;
-      else text += `- ${r.bicarbSalt}: ${r.single.g_Bicarb_inStock.toFixed(2)} g\n`;
-    } else {
-      text += `Bottle A (Ca+Mg), dose ${r.double.dropsA} drops:\n`;
-      text += `- CaCl₂·2H₂O: ${r.double.gA_CaCl2.toFixed(2)} g\n`;
-      text += `- MgSO₄·7H₂O: ${r.double.gA_MgSO4.toFixed(2)} g\n\n`;
-      text += `Bottle B (HCO₃), dose ${r.double.dropsB} drops:\n`;
-      if (r.bicarbSalt === "none") text += `- HCO₃ source: none\n`;
-      else text += `- ${r.bicarbSalt}: ${r.double.gB_Bicarb.toFixed(2)} g\n`;
-    }
-
-    await navigator.clipboard.writeText(text);
-    alert(t('copied'));
-  }
-
-  // Wire events
-  ["mode","bottleL","dropsPerMl","stockMl","dropsSingle","dropsA","dropsB","targetCa","targetMg","targetHco3","bicarbSalt"]
-  .forEach(id => $(id).addEventListener("input", compute));
-  $("mode").addEventListener("change", toggleModeUI);
-  $("preset").addEventListener("change", e => applyPreset(e.target.value));
-  $("btnCopy").addEventListener("click", copyResult);
-
-  // Language switcher
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
-  });
-
-  // Initialize with saved language
-  applyLanguage(currentLang);
-</script>
-</body>
+    <script type="module" src="src/main.js"></script>
+  </body>
 </html>

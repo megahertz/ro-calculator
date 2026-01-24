@@ -1,17 +1,19 @@
 # WHO - Nutrients in Drinking Water
 
-*World Health Organization, Geneva 2005*
-*ISBN 92 4 159398 9*
+_World Health Organization, Geneva 2005_ _ISBN 92 4 159398 9_
 
-This directory contains the extracted chapters from the WHO document "Nutrients in Drinking Water" organized into individual markdown files.
+This directory contains the extracted chapters from the WHO document "Nutrients
+in Drinking Water" organized into individual markdown files.
 
 ---
 
 ## Quick Search
 
-**[Topic Index](./TOPIC_INDEX.md)** - Browse by topic (minerals, health conditions, water types, etc.)
+**[Topic Index](./TOPIC_INDEX.md)** - Browse by topic (minerals, health
+conditions, water types, etc.)
 
 **Command-line search:**
+
 ```bash
 # Basic search
 python docs/who-water/search.py magnesium
@@ -28,6 +30,7 @@ python docs/who-water/search.py --list-topics
 ## Table of Contents
 
 ### Front Matter
+
 - [Preface](./00-preface.md)
 - [Acknowledgements](./00-acknowledgements.md)
 
