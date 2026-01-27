@@ -1,5 +1,7 @@
 # RO Remineralization Calculator
 
+[Open](https://megahertz.github.io/ro-calculator/)
+
 A simple, practical calculator for people who use a reverse osmosis (RO) system
 and want to prepare drinking water with a clean taste and a reasonable mineral
 balance. You set target levels for calcium (Ca²⁺), magnesium (Mg²⁺), and
