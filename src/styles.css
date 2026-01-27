@@ -252,6 +252,10 @@ button:hover {
   background: rgba(26, 163, 200, 0.12);
 }
 
+.seo {
+  margin-top: 16px;
+}
+
 @media (max-width: 900px) {
   .grid {
     grid-template-columns: 1fr;
