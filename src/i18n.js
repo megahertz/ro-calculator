@@ -13,6 +13,7 @@ const translations = {
     '2) Targets in finished water (mg/L)': '2) Цели в готовой воде (mg/L)',
     '2 bottles (more stable, less precipitate)':
       '2 флакона (стабильнее, меньше осадка)',
+    'About this calculator': 'О калькуляторе',
     'Added TDS (approx, mg/L)': 'Добавленный TDS (примерно, mg/L)',
     'Also calculating estimates:': 'Также считаем оценки:',
     'and approximate added': 'и приблизительно добавленный',
@@ -26,6 +27,8 @@ const translations = {
     'Copied to clipboard.': 'Скопировано в буфер обмена.',
     'Copy result': 'Скопировать результат',
     'Dilution (concentrate : water)': 'Разведение (концентрат : вода)',
+    "Disclaimer: I'm not a professional chemist, and this calculator was created with the help of AI. Please use it thoughtfully and at your own risk; the author cannot take responsibility for any outcomes.":
+      'Дисклеймер: я не профессиональный химик, и этот калькулятор создан с помощью ИИ. Пользуйтесь им осознанно и на свой риск; автор не может нести ответственность за возможные последствия.',
     "Don't add HCO₃⁻": 'Не добавлять HCO₃⁻',
     'Dose (mL) per bottle': 'Доза (mL) на бутылку',
     'Drops from bottle A (Ca+Mg)': 'Капель из флакона A (Ca+Mg)',
@@ -50,23 +53,21 @@ const translations = {
       'Na⁺ получается заметным (>25 mg/L). Если хочешь ниже — уменьши HCO₃⁻ цель.',
     'NaHCO₃ (baking soda)': 'NaHCO₃ (пищевая сода)',
     'of concentrate': 'концентрата',
-    'About this calculator': 'О калькуляторе',
     'Preset': 'Пресет',
     'Results': 'Результаты',
-    'RO Remineralization Calculator': 'Калькулятор реминерализации после обратного осмоса',
+    'RO Remineralization Calculator':
+      'Калькулятор реминерализации после обратного осмоса',
     'Salts for': 'Соли на',
     'Stock volume (mL)': 'Объём концентрата (mL)',
     'Sum A+B = total dosage. Convenient standard: 5 + 5 = 10 drops per 0.5 L.':
       'Сумма A+B — общая дозировка. Удобный стандарт: 5 + 5 = 10 капель на 0.5 L.',
+    'This calculator is for people who use a reverse osmosis (RO) system and want to prepare drinking water with a healthy mineral balance and clean taste. Set target levels for calcium, magnesium, and bicarbonate, then get precise salt amounts for a concentrate that you dose into each bottle.':
+      'Этот калькулятор для людей, которые используют систему обратного осмоса (RO) и хотят готовить питьевую воду со здоровым минеральным балансом и чистым вкусом. Задайте цели по кальцию, магнию и гидрокарбонату, а затем получите точные количества солей для концентрата, который дозируется в каждую бутылку.',
     'Very high dilution: salts in concentrate will be very concentrated.':
       'Очень большое разведение: соли в концентрате будут очень концентрированными.',
     'Very low dilution: concentrate will be weak (or drop is too large).':
       'Очень маленькое разведение: концентрат выйдет слабым (или капля слишком большая).',
     'Warnings:': 'Предупреждения:',
-    'This calculator is for people who use a reverse osmosis (RO) system and want to prepare drinking water with a healthy mineral balance and clean taste. Set target levels for calcium, magnesium, and bicarbonate, then get precise salt amounts for a concentrate that you dose into each bottle.':
-      'Этот калькулятор для людей, которые используют систему обратного осмоса (RO) и хотят готовить питьевую воду со здоровым минеральным балансом и чистым вкусом. Задайте цели по кальцию, магнию и гидрокарбонату, а затем получите точные количества солей для концентрата, который дозируется в каждую бутылку.',
-    "Disclaimer: I'm not a professional chemist, and this calculator was created with the help of AI. Please use it thoughtfully and at your own risk; the author cannot take responsibility for any outcomes.":
-      'Дисклеймер: я не профессиональный химик, и этот калькулятор создан с помощью ИИ. Пользуйтесь им осознанно и на свой риск; автор не может нести ответственность за возможные последствия.',
   },
 };
 

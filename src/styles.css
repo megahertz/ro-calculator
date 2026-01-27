@@ -41,7 +41,11 @@ body::after {
   inset: -20% -10% auto auto;
   width: 420px;
   height: 420px;
-  background: radial-gradient(circle, rgba(26, 163, 200, 0.18), transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(26, 163, 200, 0.18),
+    transparent 70%
+  );
   filter: blur(2px);
   opacity: 0.7;
   pointer-events: none;
@@ -52,7 +56,11 @@ body::after {
   inset: auto auto -15% -10%;
   width: 520px;
   height: 520px;
-  background: radial-gradient(circle, rgba(109, 213, 237, 0.2), transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(109, 213, 237, 0.2),
+    transparent 70%
+  );
   opacity: 0.6;
 }
 
@@ -144,7 +152,9 @@ select {
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.9);
   color: var(--ink);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease,
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
     background 0.2s ease;
 }
 
@@ -196,7 +206,9 @@ button {
   color: #0d2d37;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease,
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
     border-color 0.2s ease;
 }
 
