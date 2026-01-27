@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { frac, MM, PRESETS } from '../constants.js';
+'use strict';
+
+const { frac, MM, PRESETS } = require('../constants.js');
 
 describe('Molar masses (MM)', () => {
   it('has correct molar mass for Calcium', () => {

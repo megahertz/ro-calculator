@@ -1,14 +1,32 @@
-import { frac } from './constants.js';
+'use strict';
 
-export function calculateDilutionFactor(bottleMl, doseMl) {
+if (typeof module === 'object' && typeof require === 'function') {
+  globalThis.frac = require('./constants.js').frac;
+  module.exports = {
+    calculateDilutionFactor,
+    calculateDoseMl,
+    calculateDoubleBottleSalts,
+    calculateGH,
+    calculateKH,
+    calculateNaOrK,
+    calculateSaltsPerLWater,
+    calculateSingleBottleSalts,
+    calculateTDS,
+    compute,
+    getWarnings,
+    round,
+  };
+}
+
+function calculateDilutionFactor(bottleMl, doseMl) {
   return bottleMl / doseMl;
 }
 
-export function calculateDoseMl(drops, dropsPerMl) {
+function calculateDoseMl(drops, dropsPerMl) {
   return drops / dropsPerMl;
 }
 
-export function calculateDoubleBottleSalts(
+function calculateDoubleBottleSalts(
   targetCa,
   targetMg,
   targetHco3,
@@ -49,19 +67,19 @@ export function calculateDoubleBottleSalts(
   };
 }
 
-export function calculateGH(targetCa, targetMg) {
+function calculateGH(targetCa, targetMg) {
   const caAsCaCO3 = targetCa * 2.497;
   const mgAsCaCO3 = targetMg * 4.118;
   return (caAsCaCO3 + mgAsCaCO3) / 17.848;
 }
 
-export function calculateKH(targetHco3, bicarbSalt) {
+function calculateKH(targetHco3, bicarbSalt) {
   if (bicarbSalt === 'none') return 0;
   const hco3AsCaCO3 = targetHco3 * (50 / 61.0168);
   return hco3AsCaCO3 / 17.848;
 }
 
-export function calculateNaOrK(targetHco3, bicarbSalt) {
+function calculateNaOrK(targetHco3, bicarbSalt) {
   let naMgL = 0;
   let kMgL = 0;
 
@@ -76,12 +94,7 @@ export function calculateNaOrK(targetHco3, bicarbSalt) {
   return { kMgL, naMgL };
 }
 
-export function calculateSaltsPerLWater(
-  targetCa,
-  targetMg,
-  targetHco3,
-  bicarbSalt,
-) {
+function calculateSaltsPerLWater(targetCa, targetMg, targetHco3, bicarbSalt) {
   const gCaCl2PerL = targetCa / 1000 / frac.Ca_in_CaCl2_2H2O;
   const gMgSO4PerL = targetMg / 1000 / frac.Mg_in_MgSO4_7H2O;
 
@@ -95,7 +108,7 @@ export function calculateSaltsPerLWater(
   return { gBicarbPerL, gCaCl2PerL, gMgSO4PerL };
 }
 
-export function calculateSingleBottleSalts(
+function calculateSingleBottleSalts(
   targetCa,
   targetMg,
   targetHco3,
@@ -124,7 +137,7 @@ export function calculateSingleBottleSalts(
   };
 }
 
-export function calculateTDS(targetCa, targetMg, targetHco3, bicarbSalt) {
+function calculateTDS(targetCa, targetMg, targetHco3, bicarbSalt) {
   const salts = calculateSaltsPerLWater(
     targetCa,
     targetMg,
@@ -134,7 +147,7 @@ export function calculateTDS(targetCa, targetMg, targetHco3, bicarbSalt) {
   return (salts.gCaCl2PerL + salts.gMgSO4PerL + salts.gBicarbPerL) * 1000;
 }
 
-export function compute(input) {
+function compute(input) {
   const {
     bicarbSalt,
     bottleL,
@@ -211,7 +224,7 @@ export function compute(input) {
   };
 }
 
-export function getWarnings(
+function getWarnings(
   mode,
   dilutionFactor,
   bicarbSalt,
@@ -255,7 +268,7 @@ export function getWarnings(
   return warnings;
 }
 
-export function round(n, decimals = 2) {
+function round(n, decimals = 2) {
   if (!Number.isFinite(n)) return '—';
   const p = 10 ** decimals;
   return String(Math.round(n * p) / p);

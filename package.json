@@ -1,7 +1,6 @@
 {
   "name": "ro-calculator",
   "version": "1.0.0",
-  "type": "module",
   "scripts": {
     "format": "prettier . --write && eslint --fix",
     "lint": "prettier . --check && eslint",

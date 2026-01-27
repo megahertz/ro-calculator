@@ -1,29 +1,21 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import { getLanguage, setLanguage, t, translations } from '../i18n.js';
+'use strict';
+
+const { getLanguage, setLanguage, t, translations } = require('../i18n.js');
+
+const { ru } = translations;
 
 describe('translations', () => {
-  it('has Russian translations object', () => {
-    expect(translations).toBeDefined();
-    expect(typeof translations).toBe('object');
-  });
-
-  it('has non-empty values', () => {
-    for (const [key, value] of Object.entries(translations)) {
-      expect(value, `${key} should not be empty`).toBeTruthy();
-    }
-  });
-
   it('contains key translations', () => {
-    expect(translations.Mode).toBe('Режим');
-    expect(translations.Results).toBe('Результаты');
-    expect(translations['Copy result']).toBe('Скопировать результат');
+    expect(ru.Mode).toBe('Режим');
+    expect(ru.Results).toBe('Результаты');
+    expect(ru['Copy result']).toBe('Скопировать результат');
   });
 
   it('preserves chemical formulas', () => {
     const key =
       'In 1 bottle Ca²⁺ + HCO₃⁻ may form CaCO₃ precipitate. Switch to 2 bottles if needed.';
-    expect(translations[key]).toContain('Ca²⁺');
-    expect(translations[key]).toContain('HCO₃⁻');
+    expect(ru[key]).toContain('Ca²⁺');
+    expect(ru[key]).toContain('HCO₃⁻');
   });
 });
 

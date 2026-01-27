@@ -1,12 +1,10 @@
-import { detectLanguage } from './i18n.js';
-import {
-  $,
-  applyLanguage,
-  applyPreset,
-  copyResult,
-  runCompute,
-  toggleModeUI,
-} from './ui.js';
+'use strict';
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 
 function init() {
   const inputIds = [
@@ -37,10 +35,4 @@ function init() {
   }
 
   applyLanguage(detectLanguage());
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
 }

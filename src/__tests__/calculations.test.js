@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import {
+'use strict';
+
+const {
   calculateDilutionFactor,
   calculateDoseMl,
   calculateDoubleBottleSalts,
@@ -12,7 +13,7 @@ import {
   compute,
   getWarnings,
   round,
-} from '../calculations.js';
+} = require('../calculations.js');
 
 describe('round', () => {
   it('rounds to 2 decimal places by default', () => {

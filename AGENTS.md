@@ -35,6 +35,13 @@ Calculator outputs:
 | 33-205  | HTML Body  | Input forms, results display, preset buttons |
 | 207-524 | JavaScript | All calculation logic                        |
 
+### Related Files
+
+| File             | Purpose                                           |
+| ---------------- | ------------------------------------------------- |
+| `src/i18n.js`    | Language switch + translations for all UI strings |
+| `src/styles.css` | Layout, typography, and responsive styling        |
+
 ### Key JavaScript Components
 
 | Lines   | Component              | Purpose                                                      |
@@ -47,6 +54,13 @@ Calculator outputs:
 | 456-476 | Preset functions       | `presetDefault()`, `presetMoreMineral()`, `presetNoBicarb()` |
 | 478-511 | `copyResult()`         | Copies calculation results to clipboard                      |
 | 513-523 | Event wiring           | Input listeners, button handlers, initial compute            |
+
+### Internationalization (i18n)
+
+- All UI strings use `data-i18n` in `index.html`.
+- `src/i18n.js` uses the element text as the key and normalizes whitespace
+  (collapses newlines/spaces) before lookup.
+- Add translations to the `translations.ru` map using the normalized key text.
 
 ### Salts Used
 
@@ -229,6 +243,16 @@ with direct links to relevant chapters.
 ```
 /
 ├── AGENTS.md                              # This file (repo root)
+├── index.html
+├── vitest.config.js
+├── src/
+│   ├── calculations.js
+│   ├── constants.js
+│   ├── i18n.js
+│   ├── main.js
+│   ├── ui.js
+│   ├── styles.css
+│   └── __tests__/                         # Test files live here
 └── docs/who-water/
     ├── README.md                          # Table of contents
     ├── TOPIC_INDEX.md                     # Browsable topic index

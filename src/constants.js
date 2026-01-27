@@ -1,5 +1,7 @@
+'use strict';
+
 // Molar masses in g/mol
-export const MM = {
+const MM = {
   Ca: 40.078,
   CaCl2_2H2O: 147.014,
   HCO3: 61.0168,
@@ -12,7 +14,7 @@ export const MM = {
 };
 
 // Mass fractions (ion mass / salt mass)
-export const frac = {
+const frac = {
   Ca_in_CaCl2_2H2O: MM.Ca / MM.CaCl2_2H2O,
   HCO3_in_KHCO3: MM.HCO3 / MM.KHCO3,
   HCO3_in_NaHCO3: MM.HCO3 / MM.NaHCO3,
@@ -21,8 +23,12 @@ export const frac = {
   Na_in_NaHCO3: MM.Na / MM.NaHCO3,
 };
 
-export const PRESETS = {
+const PRESETS = {
   default: { bicarbSalt: 'NaHCO3', targetCa: 30, targetHco3: 30, targetMg: 20 },
   mineral: { bicarbSalt: 'NaHCO3', targetCa: 50, targetHco3: 50, targetMg: 20 },
   noBicarb: { bicarbSalt: 'none', targetCa: 30, targetHco3: 0, targetMg: 20 },
 };
+
+if (typeof module !== 'undefined') {
+  module.exports = { frac, MM, PRESETS };
+}

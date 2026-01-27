@@ -1,20 +1,23 @@
-import { compute, round } from './calculations.js';
-import { PRESETS } from './constants.js';
-import { applyLanguageToDOM, setLanguage, t } from './i18n.js';
+'use strict';
 
-// eslint-disable-next-line unicorn/prefer-query-selector
-export const $ = (id) => document.getElementById(id);
-const num = (id) => Number.parseFloat($(id).value);
+function $(id) {
+  // eslint-disable-next-line unicorn/prefer-query-selector
+  return document.getElementById(id);
+}
+
+function num(id) {
+  return parseFloat($(id).value);
+}
 
 let lastResult;
 
-export function applyLanguage(lang) {
+function applyLanguage(lang) {
   setLanguage(lang);
   applyLanguageToDOM();
   runCompute();
 }
 
-export function applyPreset(preset) {
+function applyPreset(preset) {
   const p = PRESETS[preset];
   if (!p) return;
   $('targetCa').value = p.targetCa;
@@ -24,12 +27,12 @@ export function applyPreset(preset) {
   runCompute();
 }
 
-export async function copyResult() {
+async function copyResult() {
   if (!lastResult) return;
   const r = lastResult;
   const { input } = r;
 
-  let text = `RO Remineralization — расчет концентрата\n`;
+  let text = `RO Remineralization Calculator\n`;
   text += `Mode: ${input.mode === 'single' ? 'single bottle' : 'two bottles'}\n`;
   text += `Bottle: ${input.bottleL} L\n`;
   text += `dropsPerMl: ${input.dropsPerMl}\n`;
@@ -60,10 +63,11 @@ export async function copyResult() {
   }
 
   await navigator.clipboard.writeText(text);
+  // eslint-disable-next-line no-alert
   alert(t('Copied to clipboard.'));
 }
 
-export function getInputs() {
+function getInputs() {
   return {
     bicarbSalt: $('bicarbSalt').value,
     bottleL: num('bottleL'),
@@ -79,13 +83,17 @@ export function getInputs() {
   };
 }
 
-export function runCompute() {
+function runCompute() {
   const input = getInputs();
   const result = compute(input);
   updateUI(result, input);
 }
 
-export function toggleModeUI() {
+function saltLine(name, grams) {
+  return `${name.padEnd(10)} ${round(grams, 2)} g`;
+}
+
+function toggleModeUI() {
   const isSingle = $('mode').value === 'single';
   $('singleDoseBlock').classList.toggle('hide', !isSingle);
   $('doubleDoseBlock').classList.toggle('hide', isSingle);
@@ -94,7 +102,7 @@ export function toggleModeUI() {
   runCompute();
 }
 
-export function updateUI(result, input) {
+function updateUI(result, input) {
   lastResult = { ...result, input };
 
   $('doseMlOut').textContent = `${round(result.doseMl, 3)} mL`;
@@ -154,8 +162,4 @@ export function updateUI(result, input) {
       ? `${t('Warnings:')} ${warningTexts.join(' ')}`
       : '';
   warningsEl.classList.toggle('hide', result.warnings.length === 0);
-}
-
-function saltLine(name, grams) {
-  return `${name.padEnd(10)} ${round(grams, 2)} g`;
 }

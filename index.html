@@ -126,8 +126,9 @@
         </div>
 
         <p class="muted">
-          Also calculating estimates: <span class="mono">GH (dH)</span>,
-          <span class="mono">KH (dH)</span> and approximate added
+          <span data-i18n>Also calculating estimates:</span>
+          <span class="mono">GH (dH)</span>, <span class="mono">KH (dH)</span>
+          <span data-i18n>and approximate added</span>
           <span class="mono">TDS</span>.
         </p>
       </div>
@@ -208,22 +209,31 @@
         <hr style="border: none; border-top: 1px solid #eee; margin: 12px 0" />
 
         <div class="k" data-i18n>Formulas for verification</div>
-        <div
+        <pre
           class="muted mono"
-          style="white-space: pre-wrap; margin-top: 6px"
+          style="white-space: pre-line; margin-top: 6px"
           id="formulas"
         >
-          dose_mL = drops / dropsPerMl dilution_factor = bottle_mL / dose_mL
+          dose_mL = drops / dropsPerMl
+          dilution_factor = bottle_mL / dose_mL
           C_stock(mg/L) = C_target(mg/L) * dilution_factor
+
           grams_salt_per_L_stock = (C_stock(mg/L) / 1000) /
-          mass_fraction_ion_in_salt grams_in_stock_volume =
-          grams_salt_per_L_stock * (stock_mL / 1000) Hardness: Ca as CaCO₃
-          (mg/L) = Ca(mg/L) * 2.497 Mg as CaCO₃ (mg/L) = Mg(mg/L) * 4.118
-          GH(°dH) = (CaCO3_total mg/L) / 17.848 Alkalinity (approx): HCO₃ as
-          CaCO₃ (mg/L) = HCO₃(mg/L) * (50 / 61.0168) KH(°dH) = (HCO3_as_CaCO3
-          mg/L) / 17.848 Approx added TDS: TDS_added ≈ (mg/L of added salts in
-          finished water summed)
-        </div>
+          mass_fraction_ion_in_salt
+          grams_in_stock_volume = grams_salt_per_L_stock * (stock_mL / 1000)
+
+          Hardness:
+          Ca as CaCO₃ (mg/L) = Ca(mg/L) * 2.497
+          Mg as CaCO₃ (mg/L) = Mg(mg/L) * 4.118
+          GH(°dH) = (CaCO3_total mg/L) / 17.848
+
+          Alkalinity (approx):
+          HCO₃ as CaCO₃ (mg/L) = HCO₃(mg/L) * (50 / 61.0168)
+          KH(°dH) = (HCO3_as_CaCO3 mg/L) / 17.848
+
+          Approx added TDS:
+          TDS_added ≈ (mg/L of added salts in finished water summed)
+        </pre>
 
         <div class="btns">
           <button id="btnCopy" data-i18n>Copy result</button>
@@ -233,6 +243,10 @@
       </div>
     </div>
 
-    <script type="module" src="src/main.js"></script>
+    <script src="src/constants.js"></script>
+    <script src="src/i18n.js"></script>
+    <script src="src/calculations.js"></script>
+    <script src="src/ui.js"></script>
+    <script src="src/main.js"></script>
   </body>
 </html>

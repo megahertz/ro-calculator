@@ -75,6 +75,10 @@ select {
   border-radius: 12px;
 }
 
+input {
+  width: 80px;
+}
+
 .out {
   background: #fafafa;
   border: 1px solid #eee;
