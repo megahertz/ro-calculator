@@ -1,5 +1,9 @@
 {
   "name": "ro-calculator",
+  "author": "Alexey Prokhorov",
+  "license": "MIT",
+  "description": "RO Remineralization Calculator",
+  "private": true,
   "version": "1.0.0",
   "scripts": {
     "format": "prettier . --write && eslint --fix",

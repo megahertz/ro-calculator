@@ -53,8 +53,7 @@ const translations = {
     'About this calculator': 'О калькуляторе',
     'Preset': 'Пресет',
     'Results': 'Результаты',
-    'RO Remineralization Calculator: drops → salt grams (1 bottle or 2 bottles)':
-      'Калькулятор реминерализации RO: капли → граммы солей (1 флакон или 2 флакона)',
+    'RO Remineralization Calculator': 'Калькулятор реминерализации после обратного осмоса',
     'Salts for': 'Соли на',
     'Stock volume (mL)': 'Объём концентрата (mL)',
     'Sum A+B = total dosage. Convenient standard: 5 + 5 = 10 drops per 0.5 L.':
