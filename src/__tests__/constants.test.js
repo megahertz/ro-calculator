@@ -104,24 +104,34 @@ describe('Presets', () => {
 
   it('has acquaPanna-like preset', () => {
     expect(PRESETS.acquaPanna).toEqual({
-      bicarbSalt: 'NaHCO3',
-      targetCa: 20,
-      targetHco3: 66,
-      targetMg: 4,
+      bicarbSalt: 'KHCO3',
+      targetCa: 32,
+      targetHco3: 107,
+      targetMg: 7,
     });
   });
 
-  it('keeps all like presets on NaHCO3', () => {
+  it('has arkhyz-like preset', () => {
+    expect(PRESETS.arkhyz).toEqual({
+      bicarbSalt: 'KHCO3',
+      targetCa: 40,
+      targetHco3: 175,
+      targetMg: 10,
+    });
+  });
+
+  it('uses KHCO3 for mineral-water-like presets except voss', () => {
     for (const key of [
       'acquaPanna',
+      'arkhyz',
       'baikal430',
       'evian',
       'gerolsteinerNaturell',
       'perrier',
       'sanPellegrino',
-      'voss',
     ]) {
-      expect(PRESETS[key].bicarbSalt).toBe('NaHCO3');
+      expect(PRESETS[key].bicarbSalt).toBe('KHCO3');
     }
+    expect(PRESETS.voss.bicarbSalt).toBe('NaHCO3');
   });
 });
