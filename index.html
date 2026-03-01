@@ -24,11 +24,11 @@
         <div class="row">
           <label data-i18n>Mode</label>
           <select id="mode">
-            <option value="single" selected data-i18n>
-              1 bottle (simpler, possible precipitate)
-            </option>
-            <option value="double" data-i18n>
+            <option value="double" selected data-i18n>
               2 bottles (more stable, less precipitate)
+            </option>
+            <option value="single" data-i18n>
+              1 bottle (simpler, possible precipitate)
             </option>
           </select>
         </div>
@@ -48,7 +48,7 @@
           <input id="stockMl" type="number" step="1" value="100" />
         </div>
 
-        <div id="singleDoseBlock">
+        <div id="singleDoseBlock" class="hide">
           <div class="row">
             <label data-i18n>Dose per bottle (mL)</label>
             <input id="doseSingle" type="number" step="0.01" value="0.5" />
@@ -63,25 +63,25 @@
           </p>
         </div>
 
-        <div id="doubleDoseBlock" class="hide">
+        <div id="doubleDoseBlock">
           <div class="row">
             <label data-i18n>Dose A per bottle (mL)</label>
-            <input id="doseA" type="number" step="0.01" value="0.25" />
+            <input id="doseA" type="number" step="0.01" value="0.5" />
           </div>
           <div class="row">
             <label data-i18n>Drops from bottle A (Ca)</label>
-            <input id="dropsA" type="number" step="1" value="5" />
+            <input id="dropsA" type="number" step="1" value="10" />
           </div>
           <div class="row">
             <label data-i18n>Dose B per bottle (mL)</label>
-            <input id="doseB" type="number" step="0.01" value="0.25" />
+            <input id="doseB" type="number" step="0.01" value="0.5" />
           </div>
           <div class="row">
             <label data-i18n>Drops from bottle B (Mg+HCO₃⁻)</label>
-            <input id="dropsB" type="number" step="1" value="5" />
+            <input id="dropsB" type="number" step="1" value="10" />
           </div>
           <p class="muted" data-i18n>
-            Sum A+B = total dosage. Convenient standard: 5 + 5 = 10 drops per
+            Sum A+B = total dosage. Convenient standard: 10 + 10 = 20 drops per
             0.5 L.
           </p>
         </div>
@@ -104,6 +104,21 @@
             </option>
             <option value="mineral">Ca50 / Mg20 / HCO₃ 50</option>
             <option value="noBicarb" data-i18n>Ca30 / Mg20 / no HCO₃⁻</option>
+            <option value="acquaPanna">
+              Acqua Panna-like: Ca20 / Mg4 / HCO₃ 66
+            </option>
+            <option value="baikal430">
+              BAIKAL430-like: Ca25 / Mg5 / HCO₃ 66
+            </option>
+            <option value="evian">evian-like: Ca15 / Mg5 / HCO₃ 66</option>
+            <option value="gerolsteinerNaturell">
+              Gerolsteiner Naturell-like: Ca14 / Mg5 / HCO₃ 66
+            </option>
+            <option value="perrier">Perrier-like: Ca25 / Mg1 / HCO₃ 66</option>
+            <option value="sanPellegrino">
+              S.Pellegrino-like: Ca45 / Mg14 / HCO₃ 66
+            </option>
+            <option value="voss">VOSS-like: Ca3 / Mg0 / HCO₃ 12</option>
           </select>
         </div>
 

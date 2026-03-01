@@ -27,6 +27,33 @@ const PRESETS = {
   default: { bicarbSalt: 'NaHCO3', targetCa: 30, targetHco3: 30, targetMg: 20 },
   mineral: { bicarbSalt: 'NaHCO3', targetCa: 50, targetHco3: 50, targetMg: 20 },
   noBicarb: { bicarbSalt: 'none', targetCa: 30, targetHco3: 0, targetMg: 20 },
+  acquaPanna: {
+    bicarbSalt: 'NaHCO3',
+    targetCa: 20,
+    targetHco3: 66,
+    targetMg: 4,
+  },
+  baikal430: {
+    bicarbSalt: 'NaHCO3',
+    targetCa: 25,
+    targetHco3: 66,
+    targetMg: 5,
+  },
+  evian: { bicarbSalt: 'NaHCO3', targetCa: 15, targetHco3: 66, targetMg: 5 },
+  gerolsteinerNaturell: {
+    bicarbSalt: 'NaHCO3',
+    targetCa: 14,
+    targetHco3: 66,
+    targetMg: 5,
+  },
+  perrier: { bicarbSalt: 'NaHCO3', targetCa: 25, targetHco3: 66, targetMg: 1 },
+  sanPellegrino: {
+    bicarbSalt: 'NaHCO3',
+    targetCa: 45,
+    targetHco3: 66,
+    targetMg: 14,
+  },
+  voss: { bicarbSalt: 'NaHCO3', targetCa: 3, targetHco3: 12, targetMg: 0 },
 };
 
 if (typeof module !== 'undefined') {

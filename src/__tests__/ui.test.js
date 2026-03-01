@@ -66,8 +66,10 @@ describe('mode switching helpers', () => {
       dropsB: 18,
     });
 
-    const { copyActiveDoubleDoseToSingle, setLastActiveDoseSource } =
-      require('../ui.js');
+    const {
+      copyActiveDoubleDoseToSingle,
+      setLastActiveDoseSource,
+    } = require('../ui.js');
     setLastActiveDoseSource('bottleB');
     copyActiveDoubleDoseToSingle();
 

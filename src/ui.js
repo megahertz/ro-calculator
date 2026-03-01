@@ -205,7 +205,8 @@ function updateUI(result, input) {
   if (input.mode === 'single') {
     $('singleResultsGrid').classList.remove('hide');
     $('doubleResultsGrid').classList.add('hide');
-    $('singleDoseOut').textContent = `${round(result.bottleResults.single.doseMl, 3)} mL`;
+    $('singleDoseOut').textContent =
+      `${round(result.bottleResults.single.doseMl, 3)} mL`;
     $('singleDropsOut').textContent = `${round(input.dropsSingle, 1)} drops`;
     $('singleDilutionOut').textContent = `1 : ${round(
       result.bottleResults.single.dilutionFactor,
@@ -230,7 +231,8 @@ function updateUI(result, input) {
   } else {
     $('singleResultsGrid').classList.add('hide');
     $('doubleResultsGrid').classList.remove('hide');
-    $('doseAOut').textContent = `${round(result.bottleResults.bottleA.doseMl, 3)} mL`;
+    $('doseAOut').textContent =
+      `${round(result.bottleResults.bottleA.doseMl, 3)} mL`;
     $('dropsAOut').textContent = `${round(input.dropsA, 1)} drops`;
     $('dilutionAOut').textContent = `1 : ${round(
       result.bottleResults.bottleA.dilutionFactor,
@@ -245,7 +247,8 @@ function updateUI(result, input) {
       result.doubleSalts.bottleA.gCaCl2,
     );
 
-    $('doseBOut').textContent = `${round(result.bottleResults.bottleB.doseMl, 3)} mL`;
+    $('doseBOut').textContent =
+      `${round(result.bottleResults.bottleB.doseMl, 3)} mL`;
     $('dropsBOut').textContent = `${round(input.dropsB, 1)} drops`;
     $('dilutionBOut').textContent = `1 : ${round(
       result.bottleResults.bottleB.dilutionFactor,
@@ -255,9 +258,7 @@ function updateUI(result, input) {
       result.bottleResults.bottleB.tdsAddedMgL,
       0,
     )} mg/L`;
-    const bLines = [
-      saltLine('MgSO₄·7H₂O', result.doubleSalts.bottleB.gMgSO4),
-    ];
+    const bLines = [saltLine('MgSO₄·7H₂O', result.doubleSalts.bottleB.gMgSO4)];
     if (input.bicarbSalt === 'NaHCO3') {
       bLines.push(saltLine('NaHCO₃', result.doubleSalts.bottleB.gBicarb));
     } else if (input.bicarbSalt === 'KHCO3') {
