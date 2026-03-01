@@ -24,9 +24,6 @@ const frac = {
 };
 
 const PRESETS = {
-  default: { bicarbSalt: 'NaHCO3', targetCa: 30, targetHco3: 30, targetMg: 20 },
-  mineral: { bicarbSalt: 'NaHCO3', targetCa: 50, targetHco3: 50, targetMg: 20 },
-  noBicarb: { bicarbSalt: 'none', targetCa: 30, targetHco3: 0, targetMg: 20 },
   acquaPanna: {
     bicarbSalt: 'KHCO3',
     targetCa: 32,
@@ -45,6 +42,7 @@ const PRESETS = {
     targetHco3: 75,
     targetMg: 5,
   },
+  default: { bicarbSalt: 'NaHCO3', targetCa: 30, targetHco3: 30, targetMg: 20 },
   evian: { bicarbSalt: 'KHCO3', targetCa: 80, targetHco3: 360, targetMg: 26 },
   gerolsteinerNaturell: {
     bicarbSalt: 'KHCO3',
@@ -52,6 +50,8 @@ const PRESETS = {
     targetHco3: 577,
     targetMg: 44,
   },
+  mineral: { bicarbSalt: 'NaHCO3', targetCa: 50, targetHco3: 50, targetMg: 20 },
+  noBicarb: { bicarbSalt: 'none', targetCa: 30, targetHco3: 0, targetMg: 20 },
   perrier: { bicarbSalt: 'KHCO3', targetCa: 150, targetHco3: 420, targetMg: 4 },
   sanPellegrino: {
     bicarbSalt: 'KHCO3',

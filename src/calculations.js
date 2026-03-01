@@ -70,7 +70,7 @@ function calculateDoubleBottleSalts(
 
   return {
     bottleA: { gCaCl2: gPerLCaCl2A * stockL },
-    bottleB: { gMgSO4: gPerLMgSO4B * stockL, gBicarb: gBBicarb },
+    bottleB: { gBicarb: gBBicarb, gMgSO4: gPerLMgSO4B * stockL },
   };
 }
 
@@ -225,11 +225,6 @@ function compute(input) {
     naMgL,
   );
   const bottleResults = {
-    single: {
-      dilutionFactor: calculateDilutionFactor(bottleMl, doseSingleMl),
-      doseMl: doseSingleMl,
-      tdsAddedMgL,
-    },
     bottleA: {
       dilutionFactor: calculateDilutionFactor(bottleMl, doseAMl),
       doseMl: doseAMl,
@@ -241,6 +236,11 @@ function compute(input) {
       tdsAddedMgL: calculateBottleTDS(
         saltsPerL.gMgSO4PerL + saltsPerL.gBicarbPerL,
       ),
+    },
+    single: {
+      dilutionFactor: calculateDilutionFactor(bottleMl, doseSingleMl),
+      doseMl: doseSingleMl,
+      tdsAddedMgL,
     },
   };
 

@@ -4,8 +4,8 @@ if (typeof module === 'object') {
   module.exports = {
     copyActiveDoubleDoseToSingle,
     copySingleDoseToDouble,
-    toggleModeUI,
     setLastActiveDoseSource,
+    toggleModeUI,
   };
 }
 
@@ -21,68 +21,6 @@ function num(id) {
 let lastResult;
 let lastActiveDoseSource = 'single';
 
-function setLastActiveDoseSource(source) {
-  lastActiveDoseSource = source;
-}
-
-function doseFromDrops(drops) {
-  return drops / num('dropsPerMl');
-}
-
-function dropsFromDose(doseMl) {
-  return doseMl * num('dropsPerMl');
-}
-
-function syncFieldValue(targetId, value, decimals) {
-  if (!Number.isFinite(value)) return;
-  $(targetId).value = round(value, decimals);
-}
-
-function syncDoseFieldsFromDrops() {
-  syncFieldValue('doseSingle', doseFromDrops(num('dropsSingle')), 3);
-  syncFieldValue('doseA', doseFromDrops(num('dropsA')), 3);
-  syncFieldValue('doseB', doseFromDrops(num('dropsB')), 3);
-}
-
-function syncSingleDoseFromMl() {
-  syncFieldValue('dropsSingle', dropsFromDose(num('doseSingle')), 1);
-}
-
-function syncSingleDoseFromDrops() {
-  syncFieldValue('doseSingle', doseFromDrops(num('dropsSingle')), 3);
-}
-
-function syncBottleADoseFromMl() {
-  syncFieldValue('dropsA', dropsFromDose(num('doseA')), 1);
-}
-
-function syncBottleADoseFromDrops() {
-  syncFieldValue('doseA', doseFromDrops(num('dropsA')), 3);
-}
-
-function syncBottleBDoseFromMl() {
-  syncFieldValue('dropsB', dropsFromDose(num('doseB')), 1);
-}
-
-function syncBottleBDoseFromDrops() {
-  syncFieldValue('doseB', doseFromDrops(num('dropsB')), 3);
-}
-
-function copySingleDoseToDouble() {
-  const drops = num('dropsSingle');
-  const dose = num('doseSingle');
-  syncFieldValue('dropsA', drops, 1);
-  syncFieldValue('dropsB', drops, 1);
-  syncFieldValue('doseA', dose, 3);
-  syncFieldValue('doseB', dose, 3);
-}
-
-function copyActiveDoubleDoseToSingle() {
-  const source = lastActiveDoseSource === 'bottleB' ? 'B' : 'A';
-  syncFieldValue(`dropsSingle`, num(`drops${source}`), 1);
-  syncFieldValue(`doseSingle`, num(`dose${source}`), 3);
-}
-
 function applyLanguage(lang) {
   setLanguage(lang);
   applyLanguageToDOM();
@@ -97,6 +35,12 @@ function applyPreset(preset) {
   $('targetHco3').value = p.targetHco3;
   $('bicarbSalt').value = p.bicarbSalt;
   runCompute();
+}
+
+function copyActiveDoubleDoseToSingle() {
+  const source = lastActiveDoseSource === 'bottleB' ? 'B' : 'A';
+  syncFieldValue(`dropsSingle`, num(`drops${source}`), 1);
+  syncFieldValue(`doseSingle`, num(`dose${source}`), 3);
 }
 
 async function copyResult() {
@@ -146,6 +90,23 @@ async function copyResult() {
   alert(t('Copied to clipboard.'));
 }
 
+function copySingleDoseToDouble() {
+  const drops = num('dropsSingle');
+  const dose = num('doseSingle');
+  syncFieldValue('dropsA', drops, 1);
+  syncFieldValue('dropsB', drops, 1);
+  syncFieldValue('doseA', dose, 3);
+  syncFieldValue('doseB', dose, 3);
+}
+
+function doseFromDrops(drops) {
+  return drops / num('dropsPerMl');
+}
+
+function dropsFromDose(doseMl) {
+  return doseMl * num('dropsPerMl');
+}
+
 function getInputs() {
   return {
     bicarbSalt: $('bicarbSalt').value,
@@ -170,6 +131,45 @@ function runCompute() {
 
 function saltLine(name, grams) {
   return `${name.padEnd(10)} ${round(grams, 2)} g`;
+}
+
+function setLastActiveDoseSource(source) {
+  lastActiveDoseSource = source;
+}
+
+function syncBottleADoseFromDrops() {
+  syncFieldValue('doseA', doseFromDrops(num('dropsA')), 3);
+}
+
+function syncBottleADoseFromMl() {
+  syncFieldValue('dropsA', dropsFromDose(num('doseA')), 1);
+}
+
+function syncBottleBDoseFromDrops() {
+  syncFieldValue('doseB', doseFromDrops(num('dropsB')), 3);
+}
+
+function syncBottleBDoseFromMl() {
+  syncFieldValue('dropsB', dropsFromDose(num('doseB')), 1);
+}
+
+function syncDoseFieldsFromDrops() {
+  syncFieldValue('doseSingle', doseFromDrops(num('dropsSingle')), 3);
+  syncFieldValue('doseA', doseFromDrops(num('dropsA')), 3);
+  syncFieldValue('doseB', doseFromDrops(num('dropsB')), 3);
+}
+
+function syncFieldValue(targetId, value, decimals) {
+  if (!Number.isFinite(value)) return;
+  $(targetId).value = round(value, decimals);
+}
+
+function syncSingleDoseFromDrops() {
+  syncFieldValue('doseSingle', doseFromDrops(num('dropsSingle')), 3);
+}
+
+function syncSingleDoseFromMl() {
+  syncFieldValue('dropsSingle', dropsFromDose(num('doseSingle')), 1);
 }
 
 function toggleModeUI() {

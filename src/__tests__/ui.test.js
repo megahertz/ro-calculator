@@ -2,6 +2,20 @@
 
 const { round } = require('../calculations.js');
 
+function installDom(values) {
+  const elements = Object.fromEntries(
+    Object.entries(values).map(([id, value]) => [id, makeElement(value)]),
+  );
+
+  globalThis.document = {
+    getElementById(id) {
+      return elements[id];
+    },
+  };
+
+  return elements;
+}
+
 function makeElement(value = '') {
   return {
     classList: {
@@ -11,59 +25,45 @@ function makeElement(value = '') {
   };
 }
 
-function installDom(values) {
-  const elements = Object.fromEntries(
-    Object.entries(values).map(([id, value]) => [id, makeElement(value)]),
-  );
-
-  global.document = {
-    getElementById(id) {
-      return elements[id];
-    },
-  };
-
-  return elements;
-}
-
 describe('mode switching helpers', () => {
   beforeEach(() => {
-    global.round = round;
+    globalThis.round = round;
   });
 
   afterEach(() => {
-    delete global.document;
-    delete global.round;
+    delete globalThis.document;
+    delete globalThis.round;
   });
 
   it('copies single bottle dose and drops into both bottles', () => {
     installDom({
-      dropsPerMl: 20,
-      doseSingle: 0.6,
-      dropsSingle: 12,
       doseA: 0.25,
-      dropsA: 5,
       doseB: 0.25,
+      doseSingle: 0.6,
+      dropsA: 5,
       dropsB: 5,
+      dropsPerMl: 20,
+      dropsSingle: 12,
     });
 
     const { copySingleDoseToDouble } = require('../ui.js');
     copySingleDoseToDouble();
 
-    expect(document.getElementById('doseA').value).toBe('0.6');
-    expect(document.getElementById('doseB').value).toBe('0.6');
-    expect(document.getElementById('dropsA').value).toBe('12');
-    expect(document.getElementById('dropsB').value).toBe('12');
+    expect(document.querySelector('#doseA').value).toBe('0.6');
+    expect(document.querySelector('#doseB').value).toBe('0.6');
+    expect(document.querySelector('#dropsA').value).toBe('12');
+    expect(document.querySelector('#dropsB').value).toBe('12');
   });
 
   it('copies the last edited double bottle values back to single mode', () => {
     installDom({
-      dropsPerMl: 20,
-      doseSingle: 0.6,
-      dropsSingle: 12,
       doseA: 0.7,
-      dropsA: 14,
       doseB: 0.9,
+      doseSingle: 0.6,
+      dropsA: 14,
       dropsB: 18,
+      dropsPerMl: 20,
+      dropsSingle: 12,
     });
 
     const {
@@ -73,7 +73,7 @@ describe('mode switching helpers', () => {
     setLastActiveDoseSource('bottleB');
     copyActiveDoubleDoseToSingle();
 
-    expect(document.getElementById('doseSingle').value).toBe('0.9');
-    expect(document.getElementById('dropsSingle').value).toBe('18');
+    expect(document.querySelector('#doseSingle').value).toBe('0.9');
+    expect(document.querySelector('#dropsSingle').value).toBe('18');
   });
 });

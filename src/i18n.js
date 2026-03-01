@@ -34,9 +34,9 @@ const translations = {
     "Disclaimer: I'm not a professional chemist, and this calculator was created with the help of AI. Please use it thoughtfully and at your own risk; the author cannot take responsibility for any outcomes.":
       'Дисклеймер: я не профессиональный химик, и этот калькулятор создан с помощью ИИ. Пользуйтесь им осознанно и на свой риск; автор не может нести ответственность за возможные последствия.',
     "Don't add HCO₃⁻": 'Не добавлять HCO₃⁻',
+    'Dose (mL) per bottle': 'Доза (mL) на бутылку',
     'Dose A per bottle (mL)': 'Доза A на бутылку (mL)',
     'Dose B per bottle (mL)': 'Доза B на бутылку (mL)',
-    'Dose (mL) per bottle': 'Доза (mL) на бутылку',
     'Dose per bottle (mL)': 'Доза на бутылку (mL)',
     'Drops from bottle A (Ca)': 'Капель из флакона A (Ca)',
     'Drops from bottle B (Mg+HCO₃⁻)': 'Капель из флакона B (Mg+HCO₃⁻)',
@@ -65,8 +65,8 @@ const translations = {
     'RO Remineralization Calculator':
       'Калькулятор реминерализации после обратного осмоса',
     'Salts for': 'Соли на',
-    'Stock volume (mL)': 'Объём концентрата (mL)',
     'Single bottle': 'Один флакон',
+    'Stock volume (mL)': 'Объём концентрата (mL)',
     'Sum A+B = total dosage. Convenient standard: 10 + 10 = 20 drops per 0.5 L.':
       'Сумма A+B — общая дозировка. Удобный стандарт: 10 + 10 = 20 капель на 0.5 L.',
     'This calculator is for people who use a reverse osmosis (RO) system and want to prepare drinking water with a healthy mineral balance and clean taste. Set target levels for calcium, magnesium, and bicarbonate, then get precise salt amounts for a concentrate that you dose into each bottle.':
