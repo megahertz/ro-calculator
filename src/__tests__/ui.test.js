@@ -11,6 +11,9 @@ function installDom(values) {
     getElementById(id) {
       return elements[id];
     },
+    querySelector(selector) {
+      return selector.startsWith('#') ? elements[selector.slice(1)] : undefined;
+    },
   };
 
   return elements;
