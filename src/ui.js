@@ -11,6 +11,49 @@ function num(id) {
 
 let lastResult;
 
+function doseFromDrops(drops) {
+  return drops / num('dropsPerMl');
+}
+
+function dropsFromDose(doseMl) {
+  return doseMl * num('dropsPerMl');
+}
+
+function syncFieldValue(targetId, value, decimals) {
+  if (!Number.isFinite(value)) return;
+  $(targetId).value = round(value, decimals);
+}
+
+function syncDoseFieldsFromDrops() {
+  syncFieldValue('doseSingle', doseFromDrops(num('dropsSingle')), 3);
+  syncFieldValue('doseA', doseFromDrops(num('dropsA')), 3);
+  syncFieldValue('doseB', doseFromDrops(num('dropsB')), 3);
+}
+
+function syncSingleDoseFromMl() {
+  syncFieldValue('dropsSingle', dropsFromDose(num('doseSingle')), 1);
+}
+
+function syncSingleDoseFromDrops() {
+  syncFieldValue('doseSingle', doseFromDrops(num('dropsSingle')), 3);
+}
+
+function syncBottleADoseFromMl() {
+  syncFieldValue('dropsA', dropsFromDose(num('doseA')), 1);
+}
+
+function syncBottleADoseFromDrops() {
+  syncFieldValue('doseA', doseFromDrops(num('dropsA')), 3);
+}
+
+function syncBottleBDoseFromMl() {
+  syncFieldValue('dropsB', dropsFromDose(num('doseB')), 1);
+}
+
+function syncBottleBDoseFromDrops() {
+  syncFieldValue('doseB', doseFromDrops(num('dropsB')), 3);
+}
+
 function applyLanguage(lang) {
   setLanguage(lang);
   applyLanguageToDOM();
@@ -98,6 +141,7 @@ function toggleModeUI() {
   $('doubleDoseBlock').classList.toggle('hide', isSingle);
   $('singleOutBlock').classList.toggle('hide', !isSingle);
   $('doubleOutBlock').classList.toggle('hide', isSingle);
+  syncDoseFieldsFromDrops();
   runCompute();
 }
 

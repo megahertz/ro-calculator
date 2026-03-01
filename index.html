@@ -50,6 +50,10 @@
 
         <div id="singleDoseBlock">
           <div class="row">
+            <label data-i18n>Dose per bottle (mL)</label>
+            <input id="doseSingle" type="number" step="0.01" value="0.5" />
+          </div>
+          <div class="row">
             <label data-i18n>Drops per bottle</label>
             <input id="dropsSingle" type="number" step="1" value="10" />
           </div>
@@ -61,8 +65,16 @@
 
         <div id="doubleDoseBlock" class="hide">
           <div class="row">
+            <label data-i18n>Dose A per bottle (mL)</label>
+            <input id="doseA" type="number" step="0.01" value="0.25" />
+          </div>
+          <div class="row">
             <label data-i18n>Drops from bottle A (Ca)</label>
             <input id="dropsA" type="number" step="1" value="5" />
+          </div>
+          <div class="row">
+            <label data-i18n>Dose B per bottle (mL)</label>
+            <input id="doseB" type="number" step="0.01" value="0.25" />
           </div>
           <div class="row">
             <label data-i18n>Drops from bottle B (Mg+HCO₃⁻)</label>

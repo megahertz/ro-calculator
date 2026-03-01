@@ -10,11 +10,7 @@ function init() {
   const inputIds = [
     'mode',
     'bottleL',
-    'dropsPerMl',
     'stockMl',
-    'dropsSingle',
-    'dropsA',
-    'dropsB',
     'targetCa',
     'targetMg',
     'targetHco3',
@@ -26,6 +22,35 @@ function init() {
     if (el) el.addEventListener('input', runCompute);
   }
 
+  $('dropsSingle').addEventListener('input', () => {
+    syncSingleDoseFromDrops();
+    runCompute();
+  });
+  $('doseSingle').addEventListener('input', () => {
+    syncSingleDoseFromMl();
+    runCompute();
+  });
+  $('dropsA').addEventListener('input', () => {
+    syncBottleADoseFromDrops();
+    runCompute();
+  });
+  $('doseA').addEventListener('input', () => {
+    syncBottleADoseFromMl();
+    runCompute();
+  });
+  $('dropsB').addEventListener('input', () => {
+    syncBottleBDoseFromDrops();
+    runCompute();
+  });
+  $('doseB').addEventListener('input', () => {
+    syncBottleBDoseFromMl();
+    runCompute();
+  });
+  $('dropsPerMl').addEventListener('input', () => {
+    syncDoseFieldsFromDrops();
+    runCompute();
+  });
+
   $('mode').addEventListener('change', toggleModeUI);
   $('preset').addEventListener('change', (e) => applyPreset(e.target.value));
   $('btnCopy').addEventListener('click', copyResult);
@@ -34,5 +59,6 @@ function init() {
     btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
   }
 
+  syncDoseFieldsFromDrops();
   applyLanguage(detectLanguage());
 }

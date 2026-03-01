@@ -30,7 +30,10 @@ const translations = {
     "Disclaimer: I'm not a professional chemist, and this calculator was created with the help of AI. Please use it thoughtfully and at your own risk; the author cannot take responsibility for any outcomes.":
       'Дисклеймер: я не профессиональный химик, и этот калькулятор создан с помощью ИИ. Пользуйтесь им осознанно и на свой риск; автор не может нести ответственность за возможные последствия.',
     "Don't add HCO₃⁻": 'Не добавлять HCO₃⁻',
+    'Dose A per bottle (mL)': 'Доза A на бутылку (mL)',
+    'Dose B per bottle (mL)': 'Доза B на бутылку (mL)',
     'Dose (mL) per bottle': 'Доза (mL) на бутылку',
+    'Dose per bottle (mL)': 'Доза на бутылку (mL)',
     'Drops from bottle A (Ca)': 'Капель из флакона A (Ca)',
     'Drops from bottle B (Mg+HCO₃⁻)': 'Капель из флакона B (Mg+HCO₃⁻)',
     'Drops per 1 mL': 'Капель в 1 mL',
