@@ -43,11 +43,13 @@ function calculateDoubleBottleSalts(
   const dilutionA = bottleMl / doseAMl;
   const dilutionB = bottleMl / doseBMl;
 
+  // Bottle A: CaCl₂ only (Ca²⁺ must be separate to avoid CaSO₄ precipitate with MgSO₄)
   const stockCaAMgL = targetCa * dilutionA;
-  const stockMgAMgL = targetMg * dilutionA;
-
   const gPerLCaCl2A = stockCaAMgL / 1000 / frac.Ca_in_CaCl2_2H2O;
-  const gPerLMgSO4A = stockMgAMgL / 1000 / frac.Mg_in_MgSO4_7H2O;
+
+  // Bottle B: MgSO₄ + bicarbonate (NaHCO₃/KHCO₃ is compatible with MgSO₄)
+  const stockMgBMgL = targetMg * dilutionB;
+  const gPerLMgSO4B = stockMgBMgL / 1000 / frac.Mg_in_MgSO4_7H2O;
 
   let gBBicarb = 0;
   if (bicarbSalt !== 'none' && targetHco3 > 0) {
@@ -62,8 +64,8 @@ function calculateDoubleBottleSalts(
   }
 
   return {
-    bottleA: { gCaCl2: gPerLCaCl2A * stockL, gMgSO4: gPerLMgSO4A * stockL },
-    bottleB: { gBicarb: gBBicarb },
+    bottleA: { gCaCl2: gPerLCaCl2A * stockL },
+    bottleB: { gMgSO4: gPerLMgSO4B * stockL, gBicarb: gBBicarb },
   };
 }
 

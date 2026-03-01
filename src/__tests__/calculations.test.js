@@ -132,7 +132,7 @@ describe('calculateDoubleBottleSalts', () => {
       0.1,
     );
     expect(result.bottleA.gCaCl2).toBeCloseTo(22, 0);
-    expect(result.bottleA.gMgSO4).toBeCloseTo(40.5, 0);
+    expect(result.bottleB.gMgSO4).toBeCloseTo(40.5, 0);
     expect(result.bottleB.gBicarb).toBeCloseTo(8.26, 1);
   });
 });

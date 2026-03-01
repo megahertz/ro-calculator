@@ -52,14 +52,13 @@ async function copyResult() {
         ? `- HCO₃ source: none\n`
         : `- ${input.bicarbSalt}: ${r.singleSalts.gBicarb.toFixed(2)} g\n`;
   } else {
-    text += `Bottle A (Ca+Mg), dose ${input.dropsA} drops:\n`;
-    text += `- CaCl₂·2H₂O: ${r.doubleSalts.bottleA.gCaCl2.toFixed(2)} g\n`;
-    text += `- MgSO₄·7H₂O: ${r.doubleSalts.bottleA.gMgSO4.toFixed(2)} g\n\n`;
-    text += `Bottle B (HCO₃), dose ${input.dropsB} drops:\n`;
-    text +=
-      input.bicarbSalt === 'none'
-        ? `- HCO₃ source: none\n`
-        : `- ${input.bicarbSalt}: ${r.doubleSalts.bottleB.gBicarb.toFixed(2)} g\n`;
+    text += `Bottle A (Ca), dose ${input.dropsA} drops:\n`;
+    text += `- CaCl₂·2H₂O: ${r.doubleSalts.bottleA.gCaCl2.toFixed(2)} g\n\n`;
+    text += `Bottle B (Mg+HCO₃), dose ${input.dropsB} drops:\n`;
+    text += `- MgSO₄·7H₂O: ${r.doubleSalts.bottleB.gMgSO4.toFixed(2)} g\n`;
+    if (input.bicarbSalt !== 'none') {
+      text += `- ${input.bicarbSalt}: ${r.doubleSalts.bottleB.gBicarb.toFixed(2)} g\n`;
+    }
   }
 
   await navigator.clipboard.writeText(text);
@@ -135,24 +134,20 @@ function updateUI(result, input) {
     }
     $('saltsSingle').textContent = lines.join('\n');
   } else {
-    $('saltsA').textContent = [
-      saltLine('CaCl₂·2H₂O', result.doubleSalts.bottleA.gCaCl2),
-      saltLine('MgSO₄·7H₂O', result.doubleSalts.bottleA.gMgSO4),
-    ].join('\n');
+    $('saltsA').textContent = saltLine(
+      'CaCl₂·2H₂O',
+      result.doubleSalts.bottleA.gCaCl2,
+    );
 
+    const bLines = [
+      saltLine('MgSO₄·7H₂O', result.doubleSalts.bottleB.gMgSO4),
+    ];
     if (input.bicarbSalt === 'NaHCO3') {
-      $('saltsB').textContent = saltLine(
-        'NaHCO₃',
-        result.doubleSalts.bottleB.gBicarb,
-      );
+      bLines.push(saltLine('NaHCO₃', result.doubleSalts.bottleB.gBicarb));
     } else if (input.bicarbSalt === 'KHCO3') {
-      $('saltsB').textContent = saltLine(
-        'KHCO₃',
-        result.doubleSalts.bottleB.gBicarb,
-      );
-    } else {
-      $('saltsB').textContent = t('(HCO₃⁻ not added)');
+      bLines.push(saltLine('KHCO₃', result.doubleSalts.bottleB.gBicarb));
     }
+    $('saltsB').textContent = bLines.join('\n');
   }
 
   const warningsEl = $('warnings');
