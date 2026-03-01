@@ -3,6 +3,7 @@
 if (typeof module === 'object' && typeof require === 'function') {
   globalThis.frac = require('./constants.js').frac;
   module.exports = {
+    calculateBottleTDS,
     calculateDilutionFactor,
     calculateDoseMl,
     calculateDoubleBottleSalts,
@@ -16,6 +17,10 @@ if (typeof module === 'object' && typeof require === 'function') {
     getWarnings,
     round,
   };
+}
+
+function calculateBottleTDS(gPerL) {
+  return gPerL * 1000;
 }
 
 function calculateDilutionFactor(bottleMl, doseMl) {
@@ -166,6 +171,9 @@ function compute(input) {
 
   const bottleMl = bottleL * 1000;
   const stockL = stockMl / 1000;
+  const doseSingleMl = calculateDoseMl(dropsSingle, dropsPerMl);
+  const doseAMl = calculateDoseMl(dropsA, dropsPerMl);
+  const doseBMl = calculateDoseMl(dropsB, dropsPerMl);
 
   let dropsTotal;
   let doseMl;
@@ -182,6 +190,12 @@ function compute(input) {
   const khDh = calculateKH(targetHco3, bicarbSalt);
   const { kMgL, naMgL } = calculateNaOrK(targetHco3, bicarbSalt);
   const tdsAddedMgL = calculateTDS(targetCa, targetMg, targetHco3, bicarbSalt);
+  const saltsPerL = calculateSaltsPerLWater(
+    targetCa,
+    targetMg,
+    targetHco3,
+    bicarbSalt,
+  );
 
   const singleSalts = calculateSingleBottleSalts(
     targetCa,
@@ -210,8 +224,28 @@ function compute(input) {
     targetHco3,
     naMgL,
   );
+  const bottleResults = {
+    single: {
+      dilutionFactor: calculateDilutionFactor(bottleMl, doseSingleMl),
+      doseMl: doseSingleMl,
+      tdsAddedMgL,
+    },
+    bottleA: {
+      dilutionFactor: calculateDilutionFactor(bottleMl, doseAMl),
+      doseMl: doseAMl,
+      tdsAddedMgL: calculateBottleTDS(saltsPerL.gCaCl2PerL),
+    },
+    bottleB: {
+      dilutionFactor: calculateDilutionFactor(bottleMl, doseBMl),
+      doseMl: doseBMl,
+      tdsAddedMgL: calculateBottleTDS(
+        saltsPerL.gMgSO4PerL + saltsPerL.gBicarbPerL,
+      ),
+    },
+  };
 
   return {
+    bottleResults,
     dilutionFactor,
     doseMl,
     doubleSalts,

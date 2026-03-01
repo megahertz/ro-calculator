@@ -1,6 +1,7 @@
 'use strict';
 
 const {
+  calculateBottleTDS,
   calculateDilutionFactor,
   calculateDoseMl,
   calculateDoubleBottleSalts,
@@ -109,6 +110,12 @@ describe('calculateTDS', () => {
   });
 });
 
+describe('calculateBottleTDS', () => {
+  it('converts grams per liter to mg/L', () => {
+    expect(calculateBottleTDS(0.111)).toBeCloseTo(111, 0);
+  });
+});
+
 describe('calculateSingleBottleSalts', () => {
   it('calculates salt amounts for single bottle', () => {
     const result = calculateSingleBottleSalts(30, 20, 30, 'NaHCO3', 1000, 0.1);
@@ -184,6 +191,11 @@ describe('compute', () => {
     expect(result.doseMl).toBe(0.5);
     expect(result.dropsTotal).toBe(10);
     expect(result.dilutionFactor).toBe(1000);
+    expect(result.bottleResults.single.doseMl).toBe(0.5);
+    expect(result.bottleResults.single.tdsAddedMgL).toBeCloseTo(
+      result.tdsAddedMgL,
+      5,
+    );
     expect(result.ghDh).toBeCloseTo(8.81, 1);
     expect(result.khDh).toBeCloseTo(1.38, 1);
   });
@@ -193,6 +205,12 @@ describe('compute', () => {
     expect(result.doseMl).toBe(0.5);
     expect(result.dropsTotal).toBe(10);
     expect(result.doubleSalts.bottleA.gCaCl2).toBeGreaterThan(0);
+    expect(result.bottleResults.bottleA.doseMl).toBe(0.25);
+    expect(result.bottleResults.bottleB.doseMl).toBe(0.25);
+    expect(
+      result.bottleResults.bottleA.tdsAddedMgL +
+        result.bottleResults.bottleB.tdsAddedMgL,
+    ).toBeCloseTo(result.tdsAddedMgL, 5);
   });
 
   it('handles no bicarb correctly', () => {

@@ -150,14 +150,6 @@
       <div class="out">
         <div class="kpi">
           <div>
-            <div class="k" data-i18n>Dose (mL) per bottle</div>
-            <div class="v mono" id="doseMlOut">—</div>
-          </div>
-          <div>
-            <div class="k" data-i18n>Dilution (concentrate : water)</div>
-            <div class="v mono" id="dilutionOut">—</div>
-          </div>
-          <div>
             <div class="k" data-i18n>GH estimate (°dH)</div>
             <div class="v mono" id="ghOut">—</div>
           </div>
@@ -169,50 +161,95 @@
             <div class="k" data-i18n>Na⁺ in finished water (mg/L)</div>
             <div class="v mono" id="naOut">—</div>
           </div>
-          <div>
-            <div class="k" data-i18n>Added TDS (approx, mg/L)</div>
-            <div class="v mono" id="tdsOut">—</div>
-          </div>
         </div>
 
         <hr style="border: none; border-top: 1px solid #eee; margin: 12px 0" />
 
-        <div class="k">
-          <span data-i18n>Salts for</span>
-          <span class="mono" id="stockLabel">100 mL</span>
-          <span data-i18n>of concentrate</span>:
-        </div>
-
-        <div id="singleOutBlock">
-          <div
-            class="v mono"
-            id="saltsSingle"
-            style="white-space: pre; margin-top: 8px"
-          >
-            —
+        <div id="singleResultsGrid" class="results-grid-single">
+          <div class="result-panel">
+            <div class="result-title" data-i18n>Single bottle</div>
+            <div class="result-stats">
+              <div>
+                <div class="k" data-i18n>Dose per bottle (mL)</div>
+                <div class="v mono" id="singleDoseOut">—</div>
+              </div>
+              <div>
+                <div class="k" data-i18n>Drops per bottle</div>
+                <div class="v mono" id="singleDropsOut">—</div>
+              </div>
+              <div>
+                <div class="k" data-i18n>Dilution (concentrate : water)</div>
+                <div class="v mono" id="singleDilutionOut">—</div>
+              </div>
+              <div>
+                <div class="k" data-i18n>Added TDS (approx, mg/L)</div>
+                <div class="v mono" id="singleTdsOut">—</div>
+              </div>
+            </div>
+            <div class="k">
+              <span data-i18n>Salts for</span>
+              <span class="mono" id="stockLabel">100 mL</span>
+              <span data-i18n>of concentrate</span>:
+            </div>
+            <div class="v mono result-salts" id="saltsSingle">—</div>
           </div>
         </div>
 
-        <div id="doubleOutBlock" class="hide">
-          <div class="muted" style="margin-top: 6px" data-i18n>
-            Bottle A (Ca):
+        <div id="doubleResultsGrid" class="results-grid-double hide">
+          <div class="result-panel">
+            <div class="result-title" data-i18n>Bottle A (Ca):</div>
+            <div class="result-stats">
+              <div>
+                <div class="k" data-i18n>Dose A per bottle (mL)</div>
+                <div class="v mono" id="doseAOut">—</div>
+              </div>
+              <div>
+                <div class="k" data-i18n>Drops from bottle A (Ca)</div>
+                <div class="v mono" id="dropsAOut">—</div>
+              </div>
+              <div>
+                <div class="k" data-i18n>Dilution A (concentrate : water)</div>
+                <div class="v mono" id="dilutionAOut">—</div>
+              </div>
+              <div>
+                <div class="k" data-i18n>Added TDS A (approx, mg/L)</div>
+                <div class="v mono" id="tdsAOut">—</div>
+              </div>
+            </div>
+            <div class="k">
+              <span data-i18n>Salts for</span>
+              <span class="mono" id="stockLabelA">100 mL</span>
+              <span data-i18n>of concentrate</span>:
+            </div>
+            <div class="v mono result-salts" id="saltsA">—</div>
           </div>
-          <div
-            class="v mono"
-            id="saltsA"
-            style="white-space: pre; margin-top: 6px"
-          >
-            —
-          </div>
-          <div class="muted" style="margin-top: 10px" data-i18n>
-            Bottle B (Mg+HCO₃⁻):
-          </div>
-          <div
-            class="v mono"
-            id="saltsB"
-            style="white-space: pre; margin-top: 6px"
-          >
-            —
+
+          <div class="result-panel">
+            <div class="result-title" data-i18n>Bottle B (Mg+HCO₃⁻):</div>
+            <div class="result-stats">
+              <div>
+                <div class="k" data-i18n>Dose B per bottle (mL)</div>
+                <div class="v mono" id="doseBOut">—</div>
+              </div>
+              <div>
+                <div class="k" data-i18n>Drops from bottle B (Mg+HCO₃⁻)</div>
+                <div class="v mono" id="dropsBOut">—</div>
+              </div>
+              <div>
+                <div class="k" data-i18n>Dilution B (concentrate : water)</div>
+                <div class="v mono" id="dilutionBOut">—</div>
+              </div>
+              <div>
+                <div class="k" data-i18n>Added TDS B (approx, mg/L)</div>
+                <div class="v mono" id="tdsBOut">—</div>
+              </div>
+            </div>
+            <div class="k">
+              <span data-i18n>Salts for</span>
+              <span class="mono" id="stockLabelB">100 mL</span>
+              <span data-i18n>of concentrate</span>:
+            </div>
+            <div class="v mono result-salts" id="saltsB">—</div>
           </div>
         </div>
 

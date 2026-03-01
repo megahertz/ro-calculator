@@ -81,13 +81,15 @@ async function copyResult() {
   text += `dropsPerMl: ${input.dropsPerMl}\n`;
   text += `Stock volume: ${input.stockMl} mL\n`;
   text += `Targets (mg/L): Ca=${input.targetCa}, Mg=${input.targetMg}, HCO₃=${input.targetHco3} (${input.bicarbSalt})\n`;
-  text += `Dose: ${r.dropsTotal} drops => ${r.doseMl.toFixed(3)} mL\n`;
-  text += `Dilution: 1:${r.dilutionFactor.toFixed(1)}\n`;
   text += `GH≈${r.ghDh.toFixed(2)} °dH, KH≈${r.khDh.toFixed(2)} °dH\n`;
-  text += `Na≈${r.naMgL.toFixed(1)} mg/L, TDS_added≈${r.tdsAddedMgL.toFixed(0)} mg/L\n\n`;
+  text += `Na≈${r.naMgL.toFixed(1)} mg/L\n\n`;
 
   if (input.mode === 'single') {
-    text += `Salts for ${input.stockMl} mL stock (single bottle):\n`;
+    text += `Single bottle:\n`;
+    text += `- Dose: ${r.bottleResults.single.doseMl.toFixed(3)} mL (${input.dropsSingle} drops)\n`;
+    text += `- Dilution: 1:${r.bottleResults.single.dilutionFactor.toFixed(1)}\n`;
+    text += `- TDS_added: ${r.bottleResults.single.tdsAddedMgL.toFixed(0)} mg/L\n`;
+    text += `- Salts for ${input.stockMl} mL stock:\n`;
     text += `- CaCl₂·2H₂O: ${r.singleSalts.gCaCl2.toFixed(2)} g\n`;
     text += `- MgSO₄·7H₂O: ${r.singleSalts.gMgSO4.toFixed(2)} g\n`;
     text +=
@@ -95,9 +97,15 @@ async function copyResult() {
         ? `- HCO₃ source: none\n`
         : `- ${input.bicarbSalt}: ${r.singleSalts.gBicarb.toFixed(2)} g\n`;
   } else {
-    text += `Bottle A (Ca), dose ${input.dropsA} drops:\n`;
+    text += `Bottle A (Ca):\n`;
+    text += `- Dose: ${r.bottleResults.bottleA.doseMl.toFixed(3)} mL (${input.dropsA} drops)\n`;
+    text += `- Dilution: 1:${r.bottleResults.bottleA.dilutionFactor.toFixed(1)}\n`;
+    text += `- TDS_added: ${r.bottleResults.bottleA.tdsAddedMgL.toFixed(0)} mg/L\n`;
     text += `- CaCl₂·2H₂O: ${r.doubleSalts.bottleA.gCaCl2.toFixed(2)} g\n\n`;
-    text += `Bottle B (Mg+HCO₃), dose ${input.dropsB} drops:\n`;
+    text += `Bottle B (Mg+HCO₃):\n`;
+    text += `- Dose: ${r.bottleResults.bottleB.doseMl.toFixed(3)} mL (${input.dropsB} drops)\n`;
+    text += `- Dilution: 1:${r.bottleResults.bottleB.dilutionFactor.toFixed(1)}\n`;
+    text += `- TDS_added: ${r.bottleResults.bottleB.tdsAddedMgL.toFixed(0)} mg/L\n`;
     text += `- MgSO₄·7H₂O: ${r.doubleSalts.bottleB.gMgSO4.toFixed(2)} g\n`;
     if (input.bicarbSalt !== 'none') {
       text += `- ${input.bicarbSalt}: ${r.doubleSalts.bottleB.gBicarb.toFixed(2)} g\n`;
@@ -139,8 +147,6 @@ function toggleModeUI() {
   const isSingle = $('mode').value === 'single';
   $('singleDoseBlock').classList.toggle('hide', !isSingle);
   $('doubleDoseBlock').classList.toggle('hide', isSingle);
-  $('singleOutBlock').classList.toggle('hide', !isSingle);
-  $('doubleOutBlock').classList.toggle('hide', isSingle);
   syncDoseFieldsFromDrops();
   runCompute();
 }
@@ -148,11 +154,8 @@ function toggleModeUI() {
 function updateUI(result, input) {
   lastResult = { ...result, input };
 
-  $('doseMlOut').textContent = `${round(result.doseMl, 3)} mL`;
-  $('dilutionOut').textContent = `1 : ${round(result.dilutionFactor, 1)}`;
   $('ghOut').textContent = `${round(result.ghDh, 2)} °dH`;
   $('khOut').textContent = `${round(result.khDh, 2)} °dH`;
-  $('tdsOut').textContent = `${round(result.tdsAddedMgL, 0)} mg/L`;
 
   if (input.bicarbSalt === 'NaHCO3') {
     $('naOut').textContent = `${round(result.naMgL, 1)} mg/L`;
@@ -163,8 +166,22 @@ function updateUI(result, input) {
   }
 
   $('stockLabel').textContent = `${round(input.stockMl, 0)} mL`;
+  $('stockLabelA').textContent = `${round(input.stockMl, 0)} mL`;
+  $('stockLabelB').textContent = `${round(input.stockMl, 0)} mL`;
 
   if (input.mode === 'single') {
+    $('singleResultsGrid').classList.remove('hide');
+    $('doubleResultsGrid').classList.add('hide');
+    $('singleDoseOut').textContent = `${round(result.bottleResults.single.doseMl, 3)} mL`;
+    $('singleDropsOut').textContent = `${round(input.dropsSingle, 1)} drops`;
+    $('singleDilutionOut').textContent = `1 : ${round(
+      result.bottleResults.single.dilutionFactor,
+      1,
+    )}`;
+    $('singleTdsOut').textContent = `${round(
+      result.bottleResults.single.tdsAddedMgL,
+      0,
+    )} mg/L`;
     const lines = [
       saltLine('CaCl₂·2H₂O', result.singleSalts.gCaCl2),
       saltLine('MgSO₄·7H₂O', result.singleSalts.gMgSO4),
@@ -178,11 +195,33 @@ function updateUI(result, input) {
     }
     $('saltsSingle').textContent = lines.join('\n');
   } else {
+    $('singleResultsGrid').classList.add('hide');
+    $('doubleResultsGrid').classList.remove('hide');
+    $('doseAOut').textContent = `${round(result.bottleResults.bottleA.doseMl, 3)} mL`;
+    $('dropsAOut').textContent = `${round(input.dropsA, 1)} drops`;
+    $('dilutionAOut').textContent = `1 : ${round(
+      result.bottleResults.bottleA.dilutionFactor,
+      1,
+    )}`;
+    $('tdsAOut').textContent = `${round(
+      result.bottleResults.bottleA.tdsAddedMgL,
+      0,
+    )} mg/L`;
     $('saltsA').textContent = saltLine(
       'CaCl₂·2H₂O',
       result.doubleSalts.bottleA.gCaCl2,
     );
 
+    $('doseBOut').textContent = `${round(result.bottleResults.bottleB.doseMl, 3)} mL`;
+    $('dropsBOut').textContent = `${round(input.dropsB, 1)} drops`;
+    $('dilutionBOut').textContent = `1 : ${round(
+      result.bottleResults.bottleB.dilutionFactor,
+      1,
+    )}`;
+    $('tdsBOut').textContent = `${round(
+      result.bottleResults.bottleB.tdsAddedMgL,
+      0,
+    )} mg/L`;
     const bLines = [
       saltLine('MgSO₄·7H₂O', result.doubleSalts.bottleB.gMgSO4),
     ];

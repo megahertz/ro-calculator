@@ -15,6 +15,8 @@ const translations = {
       '2 флакона (стабильнее, меньше осадка)',
     'About this calculator': 'О калькуляторе',
     'Added TDS (approx, mg/L)': 'Добавленный TDS (примерно, mg/L)',
+    'Added TDS A (approx, mg/L)': 'Добавленный TDS A (примерно, mg/L)',
+    'Added TDS B (approx, mg/L)': 'Добавленный TDS B (примерно, mg/L)',
     'Also calculating estimates:': 'Также считаем оценки:',
     'and approximate added': 'и приблизительно добавленный',
     'Bottle A (Ca):': 'Флакон A (Ca):',
@@ -27,6 +29,10 @@ const translations = {
     'Copied to clipboard.': 'Скопировано в буфер обмена.',
     'Copy result': 'Скопировать результат',
     'Dilution (concentrate : water)': 'Разведение (концентрат : вода)',
+    'Dilution A (concentrate : water)':
+      'Разведение A (концентрат : вода)',
+    'Dilution B (concentrate : water)':
+      'Разведение B (концентрат : вода)',
     "Disclaimer: I'm not a professional chemist, and this calculator was created with the help of AI. Please use it thoughtfully and at your own risk; the author cannot take responsibility for any outcomes.":
       'Дисклеймер: я не профессиональный химик, и этот калькулятор создан с помощью ИИ. Пользуйтесь им осознанно и на свой риск; автор не может нести ответственность за возможные последствия.',
     "Don't add HCO₃⁻": 'Не добавлять HCO₃⁻',
@@ -62,6 +68,7 @@ const translations = {
       'Калькулятор реминерализации после обратного осмоса',
     'Salts for': 'Соли на',
     'Stock volume (mL)': 'Объём концентрата (mL)',
+    'Single bottle': 'Один флакон',
     'Sum A+B = total dosage. Convenient standard: 5 + 5 = 10 drops per 0.5 L.':
       'Сумма A+B — общая дозировка. Удобный стандарт: 5 + 5 = 10 капель на 0.5 L.',
     'This calculator is for people who use a reverse osmosis (RO) system and want to prepare drinking water with a healthy mineral balance and clean taste. Set target levels for calcium, magnesium, and bicarbonate, then get precise salt amounts for a concentrate that you dose into each bottle.':
