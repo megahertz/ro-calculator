@@ -23,26 +23,32 @@ function init() {
   }
 
   $('dropsSingle').addEventListener('input', () => {
+    lastActiveDoseSource = 'single';
     syncSingleDoseFromDrops();
     runCompute();
   });
   $('doseSingle').addEventListener('input', () => {
+    lastActiveDoseSource = 'single';
     syncSingleDoseFromMl();
     runCompute();
   });
   $('dropsA').addEventListener('input', () => {
+    lastActiveDoseSource = 'bottleA';
     syncBottleADoseFromDrops();
     runCompute();
   });
   $('doseA').addEventListener('input', () => {
+    lastActiveDoseSource = 'bottleA';
     syncBottleADoseFromMl();
     runCompute();
   });
   $('dropsB').addEventListener('input', () => {
+    lastActiveDoseSource = 'bottleB';
     syncBottleBDoseFromDrops();
     runCompute();
   });
   $('doseB').addEventListener('input', () => {
+    lastActiveDoseSource = 'bottleB';
     syncBottleBDoseFromMl();
     runCompute();
   });

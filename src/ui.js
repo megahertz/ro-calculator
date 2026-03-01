@@ -1,5 +1,14 @@
 'use strict';
 
+if (typeof module === 'object') {
+  module.exports = {
+    copyActiveDoubleDoseToSingle,
+    copySingleDoseToDouble,
+    toggleModeUI,
+    setLastActiveDoseSource,
+  };
+}
+
 function $(id) {
   // eslint-disable-next-line unicorn/prefer-query-selector
   return document.getElementById(id);
@@ -10,6 +19,11 @@ function num(id) {
 }
 
 let lastResult;
+let lastActiveDoseSource = 'single';
+
+function setLastActiveDoseSource(source) {
+  lastActiveDoseSource = source;
+}
 
 function doseFromDrops(drops) {
   return drops / num('dropsPerMl');
@@ -52,6 +66,21 @@ function syncBottleBDoseFromMl() {
 
 function syncBottleBDoseFromDrops() {
   syncFieldValue('doseB', doseFromDrops(num('dropsB')), 3);
+}
+
+function copySingleDoseToDouble() {
+  const drops = num('dropsSingle');
+  const dose = num('doseSingle');
+  syncFieldValue('dropsA', drops, 1);
+  syncFieldValue('dropsB', drops, 1);
+  syncFieldValue('doseA', dose, 3);
+  syncFieldValue('doseB', dose, 3);
+}
+
+function copyActiveDoubleDoseToSingle() {
+  const source = lastActiveDoseSource === 'bottleB' ? 'B' : 'A';
+  syncFieldValue(`dropsSingle`, num(`drops${source}`), 1);
+  syncFieldValue(`doseSingle`, num(`dose${source}`), 3);
 }
 
 function applyLanguage(lang) {
@@ -145,9 +174,13 @@ function saltLine(name, grams) {
 
 function toggleModeUI() {
   const isSingle = $('mode').value === 'single';
+  if (isSingle) {
+    copyActiveDoubleDoseToSingle();
+  } else {
+    copySingleDoseToDouble();
+  }
   $('singleDoseBlock').classList.toggle('hide', !isSingle);
   $('doubleDoseBlock').classList.toggle('hide', isSingle);
-  syncDoseFieldsFromDrops();
   runCompute();
 }
 
